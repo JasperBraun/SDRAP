@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>SDRAP - Scrambled DNA Rearrangement Annotation Pipeline</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" 
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+        crossorigin="anonymous">  <!-- Latest compiled and minified Bootstrap CSS -->
+  
+  <link rel="stylesheet" 
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" 
+        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" 
+        crossorigin="anonymous">  <!-- Optional Bootstrap theme -->
+        
+  <link rel="stylesheet" href="css/main.css">  <!-- main SDRAP CSS -->        
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+          integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+          crossorigin="anonymous"></script>  <!-- Latest compiled and minified jQuery JS -->
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+          integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+          crossorigin="anonymous"></script>  <!-- Latest compiled and minified Bootstrap JS -->
+          
+  <script src="js/form.js"></script>
+</head>
+  
+<body>
+  <div class="container">
+
+    <div class="row">  
+      <div class="page-header">
+        <h1>SDRAP - Scrambled DNA Rearrangement Annotation Pipeline</h1>
+      </div>
+      <div id="alert-errors" class="alert alert-danger hide" role="alert">
+        <strong>Errors:</strong>
+        <ul id="errors"></ul>
+      </div>
+    </div>
+
+    <form id="mainForm" class="form-horizontal" enctype="multipart/form-data">
+    <div class="row">
+      <div class="col-md-6">
+      
+        <div class="panel panel-default">
+          <div class="panel-heading">MySQL Database</div>
+          <div class="panel-body">
+      
+	          <!-- HOSTNAME -->
+	          <div id="host" class="form-group form-group-sm has-feedback">
+	            <label for="database-hostname" class="col-sm-2 control-label">Hostname</label>
+	            <div class="col-sm-10">
+	              <input class="form-control" 
+	                     type="text" 
+	                     id="database-hostname" 
+	                     placeholder="ex: localhost"
+	                     aria-describedby="database-hostname-error-status" 
+	                     value="localhost">
+	              <span id="host-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>	                     
+	              <span id="database-hostname-error-status" class="sr-only">(error)</span>	                     
+	            </div>
+	          </div>
+	
+	          <!-- USERNAME -->
+	          <div id="user" class="form-group form-group-sm has-feedback">
+	            <label for="database-username" class="col-sm-2 control-label">Username</label>
+	            <div class="col-sm-10">
+	              <input class="form-control" 
+	                     type="text" 
+	                     id="database-username" 
+	                     placeholder="MySQL username" 
+	                     aria-describedby="database-username-error-status">
+	              <span id="user-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>	                     
+	              <span id="database-username-error-status" class="sr-only">(error)</span>
+	            </div>
+	          </div>
+	
+	          <!-- PASSWORD -->
+	          <div id="pass" class="form-group form-group-sm has-feedback">
+	            <label for="database-password" class="col-sm-2 control-label">Password</label>
+	            <div class="col-sm-10">
+	              <input class="form-control" 
+	                     type="password" 
+	                     id="database-password" 
+	                     placeholder="MySQL password"
+	                     aria-describedby="database-password-error-status">
+	              <span id="pass-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>	                     
+	              <span id="database-password-error-status" class="sr-only">(error)</span>
+	            </div>
+	          </div>
+
+            <!-- DATABASE -->
+            <div id="data" class="form-group form-group-sm has-feedback">
+              <label for="database-database" class="col-sm-2 control-label">Database Name</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text" 
+                      id="database-database" 
+                      placeholder="ex: oxytri"
+                      aria-describedby="database-database-error-status">
+	              <span id="data-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>	                     
+	              <span id="database-database-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Organism Information</div>
+          <div class="panel-body">
+
+            <!-- GENUS -->
+            <div id="genu" class="form-group form-group-sm has-feedback">
+              <label for="organism-genus" class="col-sm-2 control-label">Genus</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="organism-genus" 
+                      placeholder="ex: Oxytricha"
+                      aria-describedby="organism-genus-error-status">
+                <span id="name-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="organism-genus-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- SPECIES -->
+            <div id="spcs" class="form-group form-group-sm has-feedback">
+              <label for="organism-species" class="col-sm-2 control-label">Species</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="organism-species" 
+                      placeholder="ex: Oxytricha trifallax"
+                      aria-describedby="organism-species-error-status">
+                <span id="spcs-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="organism-species-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- STRAIN -->
+            <div id="strn" class="form-group form-group-sm has-feedback">
+              <label for="organism-strain" class="col-sm-2 control-label">Strain</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="organism-strain" 
+                      placeholder="ex: JRB510"
+                      aria-describedby="organism-strain-error-status">
+                <span id="strn-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="organism-strain-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- TAXONOMY_ID -->
+            <div id="taxo" class="form-group form-group-sm has-feedback">
+              <label for="organism-taxonomy" class="col-sm-2 control-label">Taxonomy ID</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="organism-taxonomy" 
+                      placeholder="ex: 1172189"
+                      aria-describedby="organism-taxonomy-error-status">
+                <span id="taxo-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="organism-taxonomy-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Genome Assemblies</div>
+          <div class="panel-body">
+
+            <!-- PRECURSOR_FILENAME -->
+            <div class="form-group form-group-sm">
+              <label for="sequences-precursor" class="col-sm-2 control-label">Precursor Genome</label>
+              <div class="col-sm-10">
+                <select class="form-control" id="sequences-precursor">
+                  <option>OXY_MIC_sample.fna</option><!--new-input-precursor-sequence-file-->
+                </select>
+              </div>
+            </div>
+
+            <!-- PRECURSOR_DELIMITER -->
+            <div id="precDelim" class="form-group form-group-sm has-feedback">
+              <label for="precursor-delimiter" class="col-sm-2 control-label">Precursor Sequence Description Delimiter</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="precursor-delimiter" 
+                      placeholder="ex: ,"
+                      aria-describedby="precursor-delimiter-error-status">
+                <span id="precDelim-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="precursor-delimiter-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+            
+            <!-- PRODUCT_FILENAME -->
+            <div class="form-group form-group-sm">
+              <label for="sequences-product" class="col-sm-2 control-label">Product Genome</label>
+              <div class="col-sm-10">
+                <select class="form-control" id="sequences-product">
+                  <option>Oxytricha_trifallax_022112_assembly_sample.fasta</option><!--new-input-product-sequence-file-->
+                </select>
+              </div>
+            </div>
+
+            <!-- PRODUCT_DELIMITER -->
+            <div id="prodDelim" class="form-group form-group-sm has-feedback">
+              <label for="product-delimiter" class="col-sm-2 control-label">Product Sequence Description Delimiter</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="product-delimiter" 
+                      placeholder="ex: ,"
+                      aria-describedby="product-delimiter-error-status">
+                <span id="prodDelim-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="product-delimiter-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- TELO_PATTERN -->
+            <div id="telo" class="form-group form-group-sm has-feedback">
+              <label for="organism-telomere" class="col-sm-2 control-label">Telomere Pattern</label>
+              <div class="col-sm-10">
+                <input class="form-control" 
+                      type="text"
+                      id="organism-telomere" 
+                      placeholder="ex: CCCCAAAA"
+                      aria-describedby="organism-telomere-error-status">
+                <span id="telo-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="organism-telomere-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="panel-body" style="padding-bottom: 3em;">
+          <button type="submit" class="btn btn-primary btn-lg" style="float: left;">Annotate</button>
+        </div>
+        
+      </div>  <!-- /.col-md-6 -->
+
+      <div class="col-md-6">
+      
+        <!-- Telomere Annotation Parameters -->
+        <div class="panel panel-default">
+          <div class="panel-heading">Telomere Annotation Parameters
+            <button type="button" data-toggle="collapse" data-target="#telomereParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
+          </div>
+          <div id=telomereParameters class="panel-body collapse">
+      
+            <!-- TELO_ERROR_LIMIT -->
+            <div id="tel_err_lim" class="form-group form-group-sm has-feedback">
+              <label for="telomere-errorLimit" class="col-sm-9 control-label">Mismatch Ratio Limit</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="telomere-errorLimit" 
+                       placeholder="ex: 0.2"
+                       aria-describedby="telomere-errorLimit-error-status" 
+                       value="0.2">
+                <span id="tel_err_lim-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="telomere-errorLimit-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- TELO_BUFFER_LIMIT -->
+            <div id="tel_buf_lim" class="form-group form-group-sm has-feedback">
+              <label for="telomere-bufferLimit" class="col-sm-9 control-label">Limit of Excess Mismatches in Buffer</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="telomere-bufferLimit" 
+                       placeholder="ex: 4"
+                       aria-describedby="telomere-bufferLimit-error-status" 
+                       value="4">
+                <span id="tel_buf_lim-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="telomere-bufferLimit-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- TELO_MAX_LENGTH -->
+            <div id="tel_max_len" class="form-group form-group-sm has-feedback">
+              <label for="telomere-maxLength" class="col-sm-9 control-label">Maximum Length</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="telomere-maxLength" 
+                       placeholder="ex: 100"
+                       aria-describedby="telomere-maxLength-error-status" 
+                       value="100">
+                <span id="tel_max_len-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                <span id="telomere-maxLength-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- TELO_MAX_OFFSET -->
+            <div id="tel_max_off" class="form-group form-group-sm has-feedback">
+              <label for="telomere-maxOffset" class="col-sm-9 control-label">Maximum Distance to Sequence End</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="telomere-maxOffset" 
+                       placeholder="100"
+                       aria-describedby="telomere-maxOffset-error-status" 
+                       value="100">
+                <span id="tel_max_off-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="telomere-maxOffset-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- TELO_MIN_LENGTH -->
+            <div id="tel_min_len" class="form-group form-group-sm has-feedback">
+              <label for="telomere-minLength" class="col-sm-9 control-label">Minimum Length</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="telomere-minLength" 
+                       placeholder="12"
+                       aria-describedby="telomere-minLength-error-status" 
+                       value="12">
+                <span id="tel_min_len-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="telomere-minLength-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+  
+          </div>
+        </div>
+
+        <!-- Arrangement Annotation Parameters -->
+        <div class="panel panel-default">
+          <div class="panel-heading">Arrangement Annotation Parameters
+            <button type="button" data-toggle="collapse" data-target="#annotationParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
+          </div>
+          <div id=annotationParameters class="panel-body collapse">
+
+            <!-- HSP_MIN_LENGTH -->
+            <div id="min_hsp_len" class="form-group form-group-sm has-feedback">
+              <label for="minimum-HSPlength" class="col-sm-9 control-label">Minimum HSP Length for Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-HSPlength" 
+                       placeholder="18"
+                       aria-describedby="minimum-HSPlength-error-status" 
+                       value="18">
+                <span id="min_hsp_len-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="min_hsp_len-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+      
+            <!-- PRE_MATCH_MIN_BITSCORE -->
+            <div id="min_bit" class="form-group form-group-sm has-feedback">
+              <label for="minimum-bitscore" class="col-sm-9 control-label">Minimum Bitscore for Preliminary Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-bitscore" 
+                       placeholder="49"
+                       aria-describedby="minimum-bitscore-error-status" 
+                       value="49">
+                <span id="min_bit-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-bitscore-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- PRE_MATCH_MIN_PIDENT -->
+            <div id="min_pid" class="form-group form-group-sm has-feedback">
+              <label for="minimum-pident" class="col-sm-9 control-label">Minimum Percent Identity for Preliminary Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-pident" 
+                       placeholder="99.00"
+                       aria-describedby="minimum-pident-error-status" 
+                       value="99.00">
+                <span id="min_pid-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-pident-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- PRE_MATCH_MIN_COVERAGE_ADDITION -->
+            <div id="min_cov_add" class="form-group form-group-sm has-feedback">
+              <label for="minimum-coverageAddition" class="col-sm-9 control-label">Minimum Additional Base Pair Coverage to Qualify for Preliminary Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-coverageAddition" 
+                       placeholder="4"
+                       aria-describedby="minimum-coverageAddition-error-status" 
+                       value="4">
+                <span id="min_cov_add-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-coverageAddition-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- MERGE_TOLERANCE -->
+            <div id="merge_tolerance" class="form-group form-group-sm has-feedback">
+              <label for="merge-tolerance" class="col-sm-9 control-label">Tolerance for Discrepancies Between Relative Positions of Precursor and Product Intervals for HSP Merging</label>
+              <div class="col-sm-3">
+                <input class="form-control"
+                       type="text" 
+                       id="merge-tolerance" 
+                       placeholder="8"
+                       aria-describedby="merge-tolerance-error-status" 
+                       value="8">
+                <span id="merge_tolerance-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="merge-tolerance-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- MERGE_MAX_GAP -->
+            <div id="max_merge_gap" class="form-group form-group-sm has-feedback">
+              <label for="maximum-mergeGap" class="col-sm-9 control-label">Maximum Gap Length for HSP  Merging</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="maximum-mergeGap" 
+                       placeholder="3"
+                       aria-describedby="maximum-mergeGap-error-status" 
+                       value="3">
+                <span id="max_merge_gap-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="maximum-mergeGap-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- GAP_MIN_LENGTH -->
+            <div id="min_gap" class="form-group form-group-sm has-feedback">
+              <label for="minimum-gap" class="col-sm-9 control-label">Minimum Base Pair Length for Gap Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-gap" 
+                       placeholder="4"
+                       aria-describedby="minimum-gap-error-status" 
+                       value="4">
+                <span id="min_gap-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-gap-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- COMPUTE_POINTERS -->
+            <div id="pointers" class="form-group form-group-sm has-feedback">
+              <label for="compute-pointers" class="col-sm-9 control-label">Compute Pointer Annotations on Precursor and Product Sequences</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="compute-pointers" 
+                       aria-describedby="compute-pointers-error-status"
+                       checked>
+                <span id="pointers-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="compute-pointers-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- POINTER_MIN_LENGTH -->
+            <div id="min_ptr_len" class="form-group form-group-sm has-feedback">
+              <label for="minimum-pointerLength" class="col-sm-9 control-label">Minimum Base Pair Length for Pointer Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-pointerLength" 
+                       placeholder="3"
+                       aria-describedby="minimum-pointerLength-error-status" 
+                       value="3">
+                <span id="min_ptr_len-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-pointerLength-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- ADD_MATCH_MIN_BITSCORE -->
+            <div id="min_match_bit" class="form-group form-group-sm has-feedback">
+              <label for="minimum-matchBitscore" class="col-sm-9 control-label">Minimum Bitscore for Additional Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-matchBitscore" 
+                       placeholder="49"
+                       aria-describedby="minimum-matchBitscore-error-status" 
+                       value="49">
+                <span id="min_match_bit-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-matchBitscore-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- ADD_MATCH_MIN_PIDENT -->
+            <div id="min_match_pid" class="form-group form-group-sm has-feedback">
+              <label for="minimum-matchPident" class="col-sm-9 control-label">Minimum Percent Identity for Additional Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-matchPident" 
+                       placeholder="80.00"
+                       aria-describedby="minimum-matchPident-error-status" 
+                       value="80.00">
+                <span id="min_match_pid-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-matchPident-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- ADD_MATCH_MIN_PROD_SEGMENT_OVERLAP -->
+            <div id="min_prod_seg_overlap" class="form-group form-group-sm has-feedback">
+              <label for="minimum-mdsOverlap" class="col-sm-9 control-label">Minimum Coverage of Product Interval for Additional Match Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-mdsOverlap" 
+                       placeholder="0.8"
+                       aria-describedby="minimum-mdsOverlap-error-status" 
+                       value="0.8">
+                <span id="min_prod_seg_overlap-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-mdsOverlap-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- FRAGMENT_MIN_PROD_SEGMENT_OVERLAP -->
+            <div id="min_frag_overlap" class="form-group form-group-sm has-feedback">
+              <label for="minimum-fragmentOverlap" class="col-sm-9 control-label">Minimum Coverage of Product Interval for Fragment Annotation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-fragmentOverlap" 
+                       placeholder="0.2"
+                       aria-describedby="minimum-fragmentOverlap-error-status" 
+                       value="0.2">
+                <span id="min_frag_overlap-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-fragmentOverlap-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+  
+          </div>
+        </div>
+
+        <!-- Properties Parameters -->
+        <div class="panel panel-default">
+          <div class="panel-heading">Properties Parameters
+            <button type="button" data-toggle="collapse" data-target="#propertiesParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
+          </div>
+          <div id=propertiesParameters class="panel-body collapse">
+
+            <!-- PROPERTY_MIN_COVERAGE -->
+            <div id="min_cov" class="form-group form-group-sm has-feedback">
+              <label for="minimum-coverage" class="col-sm-9 control-label">Minimum Coverage of Product Sequence for Arrangement Property Computation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text"
+                       id="minimum-coverage" 
+                       placeholder="50"
+                       aria-describedby="minimum-coverage-error-status" 
+                       value="50">
+                <span id="min_cov-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-coverage-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+        
+            <!-- PROPERTY_MAX_MATCH_OVERLAP -->
+            <div id="max_arr_olp" class="form-group form-group-sm has-feedback">
+              <label for="maximum-bpOverlap" class="col-sm-9 control-label">Maximum Tolerance for Overlapping Precursor Intervals during Arrangement Property Computation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="maximum-bpOverlap" 
+                       placeholder="5"
+                       aria-describedby="maximum-bpOverlap-error-status" 
+                       value="5">
+                <span id="max_arr_olp-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="maximum-bpOverlap-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- PROPERTY_CLIQUE_LIMIT -->
+            <div id="max_arr_num" class="form-group form-group-sm has-feedback">
+              <label for="maximum-arrangementNumber" class="col-sm-9 control-label">Maximum Number of Non Repeating and Non Overlapping Subarrangements for Arrangement Property Computation</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="maximum-arrangementNumber" 
+                       placeholder="4"
+                       aria-describedby="maximum-arrangementNumber-error-status" 
+                       value="4">
+                <span id="max_arr_num-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="maximum-arrangementNumber-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- SCR_COMPLETE -->
+            <div id="scr_complete" class="form-group form-group-sm has-feedback">
+              <label for="scrambling-complete" class="col-sm-9 control-label">Complete</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="scrambling-complete" 
+                       aria-describedby="scrambling-complete-error-status">
+                <span id="scr_complete-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="scrambling-complete-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- SCR_CONSECUTIVE -->
+            <div id="scr_consec" class="form-group form-group-sm has-feedback">
+              <label for="scrambling-cosecutive" class="col-sm-9 control-label">Consecutive</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="scrambling-consecutive" 
+                       aria-describedby="scrambling-consecutive-error-status"
+                       checked>
+                <span id="scr_consec-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="scrambling-consecutive-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- SCR_ORDERED -->
+            <div id="scr_ordered" class="form-group form-group-sm has-feedback">
+              <label for="scrambling-ordered" class="col-sm-9 control-label">Ordered</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="scrambling-ordered" 
+                       aria-describedby="scrambling-ordered-error-status"
+                       checked>
+                <span id="scr_ordered-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="scrambling-ordered-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+        
+          </div>
+        </div>
+
+        <!-- Output Parameters -->
+        <div class="panel panel-default">
+          <div class="panel-heading">Output Parameters
+            <button type="button" data-toggle="collapse" data-target="#outputParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
+          </div>
+          <div id=outputParameters class="panel-body collapse">
+        
+            <!-- OUTPUT_MIN_COVERAGE -->
+            <div id="min_mac_cov" class="form-group form-group-sm has-feedback">
+              <label for="minimum-macCoverage" class="col-sm-9 control-label">Minimum Coverage of Product Sequence for Output</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-macCoverage" 
+                       placeholder="50"
+                       aria-describedby="minimum-macCoverage-error-status" 
+                       value="50">
+                <span id="min_mac_cov-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-macCoverage-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- USE_ALIAS -->
+            <div id="alias" class="form-group form-group-sm has-feedback">
+              <label for="use-alias" class="col-sm-9 control-label">Use SDRAP Aliases</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="use-alias" 
+                       aria-describedby="use-alias-error-status">
+                <span id="alias-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="use-alias-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- OUTPUT_GAPS -->
+            <div id="gaps" class="form-group form-group-sm has-feedback">
+              <label for="output-gaps" class="col-sm-9 control-label">Output Gap Annotations on Product Sequences</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="output-gaps" 
+                       aria-describedby="output-gaps-error-status"
+                       checked>
+                <span id="gaps-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="output-gaps-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- OUTPUT_FRAGMENTS -->
+            <div id="fragments" class="form-group form-group-sm has-feedback">
+              <label for="output-fragments" class="col-sm-9 control-label">Output Fragment Annotations on Precursor Sequences</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="output-fragments" 
+                       aria-describedby="output-fragments-error-status"
+                       checked>
+                <span id="fragments-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="output-fragments-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- GIVE_PREC_SEGMENT_COMPLEMENT -->
+            <div id="complement" class="form-group form-group-sm has-feedback">
+              <label for="give-complement" class="col-sm-9 control-label">Give Complementary Intervals to Precursor Intervals of Matches on Precursor Sequences</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="give-complement" 
+                       aria-describedby="give-complement-error-status"
+                       checked>
+                <span id="complement-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="give-complement-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- COMPLEMENT_INTERVAL_MIN_LENGTH -->
+            <div id="min_complement" class="form-group form-group-sm has-feedback">
+              <label for="minimum-complement" class="col-sm-9 control-label">Minimum Length of Complementary Intervals</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-complement" 
+                       placeholder="4"
+                       aria-describedby="minimum-complement-error-status" 
+                       value="4">
+                <span id="min_complement-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-complement-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- GIVE_SUMMARY -->
+            <div id="summary" class="form-group form-group-sm has-feedback">
+              <label for="giveSummary" class="col-sm-9 control-label">Give a Summary of the Outcome</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="giveSummary" 
+                       aria-describedby="giveSummary-error-status"
+                       checked>
+                <span id="summary-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="giveSummary-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>  <!-- /.col-md-6 -->
+
+    </div>  <!-- /.row -->
+    </form>
+        
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+        <div id="sdrap-progress" class="list-group">
+
+        
+          <!-- connect to database -->
+          <a id="sdrap-connect-progress" class="list-group-item hide">
+            Creating Database: 
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active" 
+                   role="progressbar" aria-valuenow="40" aria-valuemin="100" aria-valuemax="100" 
+                   style="width: 100%">
+                <span class="sr-only">Creating Database</span>
+              </div>
+            </div>
+          </a>
+          <a id="sdrap-connect-good" class="list-group-item hide">
+              <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span> 
+              Database Created!
+          </a>
+          <a id="sdrap-connect-bad" class="list-group-item list-group-item-danger hide">
+              <span class="pull-right glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
+              Error Creating Database!
+          </a>
+
+
+          <!-- annotating telomeres -->
+          <a id="sdrap-telomere-progress" class="list-group-item hide">
+            Uploading Assemblies and Annotating Telomeres:
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active"
+                   role="progressbar" aria-valuenow="40" aria-valuemin="100" aria-valuemax="100"
+                   style="width: 100%">
+                <span class="sr-only">Uploading</span>
+              </div>
+            </div>
+          </a>
+          <a id="sdrap-telomere-good" class="list-group-item hide">
+              <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span> 
+              Assemblies Uploaded and Product Telomeres Annotated!
+          </a>
+          <a id="sdrap-telomere-bad" class="list-group-item list-group-item-danger hide">
+              <span class="pull-right glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
+              Error Uploading Assemblies or Annotating Telomeres!
+          </a>
+
+
+          <!-- BLASTing precursor and product sequences -->
+          <a id="sdrap-blast-progress" class="list-group-item hide">
+            Running BLAST+ on Precursor and Product Assemblies and Uploading HSPs:
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active"
+                   role="progressbar" aria-valuenow="40" aria-valuemin="100" aria-valuemax="100"
+                   style="width: 100%">
+                <span class="sr-only">BLASTing</span>
+              </div>
+            </div>
+          </a>
+          <a id="sdrap-blast-good" class="list-group-item hide">
+              <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span> 
+              High Scoring Pairs Identified and Uploaded!
+          </a>
+          <a id="sdrap-blast-bad" class="list-group-item list-group-item-danger hide">
+              <span class="pull-right glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
+              Error Finding or Uploading High Scoring Pairs!
+          </a>
+
+
+          <!-- annotating matches -->
+          <a id="sdrap-match-progress" class="list-group-item hide">
+            Annotating Matches, Gaps and Pointers and Computing Coverage:
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active"
+                   role="progressbar" aria-valuenow="40" aria-valuemin="100" aria-valuemax="100"
+                   style="width: 100%">
+                <span class="sr-only">Annotating</span>
+              </div>
+            </div>
+          </a>
+          <a id="sdrap-match-good" class="list-group-item hide">
+              <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span> 
+              Matches, Gaps and Pointers Annotated, and Coverage Computed!
+          </a>
+          <a id="sdrap-match-bad" class="list-group-item list-group-item-danger hide">
+              <span class="pull-right glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
+              Error Annotating Matches, Gaps or Pointers, or Computing Coverage!
+          </a>
+
+          <!-- computing properties -->
+          <a id="sdrap-properties-progress" class="list-group-item hide">
+            Computing Properties:
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active"
+                   role="progressbar" aria-valuenow="40" aria-valuemin="100" aria-valuemax="100"
+                   style="width: 100%">
+                <span class="sr-only">Computing</span>
+              </div>
+            </div>
+          </a>
+          <a id="sdrap-properties-good" class="list-group-item hide">
+              <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span> 
+              Properties Computed!
+          </a>
+          <a id="sdrap-properties-bad" class="list-group-item list-group-item-danger hide">
+              <span class="pull-right glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
+              Error Computing Properties!
+          </a>
+
+          <!-- outputting data -->
+          <a id="sdrap-output-progress" class="list-group-item hide">
+            Outputting Data:
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active"
+                   role="progressbar" aria-valuenow="40" aria-valuemin="100" aria-valuemax="100"
+                   style="width: 100%">
+                <span class="sr-only">Outputting</span>
+              </div>
+            </div>
+          </a>
+          <a id="sdrap-output-good" class="list-group-item hide">
+              <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span> 
+              Data Output!
+          </a>
+          <a id="sdrap-output-bad" class="list-group-item list-group-item-danger hide">
+              <span class="pull-right glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
+              Error Outputting Data!
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
