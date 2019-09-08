@@ -47,11 +47,13 @@ Sequence files are accepted in .fasta and .fna format. Delimiters for the select
 This user should have all privileges on the database with name specified below. We discourage the user to use a the MySQL root user or create a user with all privileges on all databases. Instead, we encourage creation of a new MySQL user solely for SDRAP. This can be done as follows:
 
 1 log into the MySQL server with a user that has sufficient privileges to create users and grant privileges.
+
 2 execute:
 ```mysql
 CREATE USER '<username>'@'localhost'
 IDENTIFIED BY '<password>';
 ```
+
 3 then:
 ```mysql
 GRANT ALL PRIVILEGES ON `<database-name>`.*
