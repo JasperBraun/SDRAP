@@ -1,9 +1,10 @@
 # SDRAP - Scrambled DNA Rearrangements Annotation Pipeline
-Brief descripotion on softwarse
+**U N D E R   C O N S T R U C T I O N**
+Brief description of software
 
 
 ## Prerequisites
-SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. Backwards compatibility cannot be guaranteed, so newer versions of these softwares may break SDRAP.
+SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. Backwards compatibility cannot be guaranteed, so newer versions of these softwares may cause unexpected behaviors.
 
 
 ## Installation
