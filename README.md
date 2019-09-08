@@ -48,18 +48,18 @@ This user should have all privileges on the database with name specified below. 
 
 1 log into the MySQL server with a user that has sufficient privileges to create users and grant privileges.
 2 execute:
-```
+```mysql
 CREATE USER '<username>'@'localhost'
 IDENTIFIED BY '<password>';
 ```
 3 then:
-```
+```mysql
 GRANT ALL PRIVILEGES ON `<database-name>`.*
 TO '<username>'@'localhost';
 ```
 
 In the above two MySQL commands, replace `'localhost'` by `'%'` if intending for SDRAP to log into the MySQL server remotely.
-Also, if you intend to use SDRAP multiple times, and do not want to grant privileges to each database individually, you can come up with a common prefix for all the databases SDRAP will create and grant all privileges on all databases with that prefix by replacing `\`<database-name>\`.*` by `\`<prefix>%\`.*`. Then, whenever specifying the *Database Name* SDRAP should use, make sure it has the specified prefix.
+Also, if you intend to use SDRAP multiple times, and do not want to grant privileges to each database individually, you can come up with a common prefix for all the databases SDRAP will create and grant all privileges on all databases with that prefix by replacing `<database-name>.*` by `<prefix>%.*`. Then, whenever specifying the *Database Name* SDRAP should use, make sure it has the specified prefix.
 For security purposes, you should ensure that only the databases created by SDRAP on the MySQL server will have the specified prefix.
 
 **Password** - the password of the MySQL user specified in the previous field.
