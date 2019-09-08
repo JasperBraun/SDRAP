@@ -5,7 +5,7 @@ Brief description of software
 
 
 ## Prerequisites
-SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. Backwards compatibility cannot be guaranteed, so newer versions of these softwares may cause unexpected behaviors.
+SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. Backwards compatibility cannot be guaranteed, so older and newer versions of these softwares may cause unexpected behaviors.
 
 
 ## Installation
@@ -24,11 +24,11 @@ As input to the pipeline, the correct precursor and product sequence files must 
 
 ###### Genome Sequence Files
 To add a sequence file for sequences in the precursor, open a terminal window `cd` into the SDRAP directory in a terminal window and run:
-```
+```bash
 ./add-sequence-file.sh precursor <file>
 ```
 To add a sequence file for sequences in the product, open a terminal windot, `cd` into the SDRAP directory and run:
-```
+```bash
 ./add-sequence-file.sh product <file>
 ```
 The two commands may require sudo rights and any browser window with the SDRAP page loaded may need to be forcibly refreshed to see the newly added files in the list of options.
@@ -153,12 +153,49 @@ To understand the meaning of these parameters and the effect their values have o
 To represent regions of high similarity, we define a *match* of a product sequence on a precursor sequence to be a triple ([*a*, *b*], [*c*, *d*], *o*), where [*a*, *b*] is an integer interval indicating a region in the precursor sequence, [*c*, *d*] is an integer interval indicating a region in the product sequence and *o* is either 0, or 1 indicating the relative orientation of the two regions (*o*=1 means the two regions have the same orientation and *o*=0 means the two regions are oppositely oriented). A high-scoring pair, which is returned by BLAST can be viewed as a *match* in the obvious way.
 
 For two nonnegative integers *t* and *g*, we consider two matches ([*a1*, *b1*], [*c1*, *d1*], *o1*), and ([*a2*, *b2*], [*c2*, *d2*], *o2*) between the same precursor and product sequence to be *(t, g)-mergeable*, if the regions on the precursor sequence and the product sequence are at most *g* base pairs apart and one of following conditions is satisfied:
-1 *o1*=*o2*=1 and |(*a1*-*a2*)-(*c1*-*c2*)|,|(*b1*-*b2*)-(*d1*-*d2*)| do not exceed *t*, or
-2 *o1*=*o2*=0 and |(*a1*-*a2*)-(*d2*-*d1*)|,|(*b1*-*b2*)-(*c2*-*c1*)| do not exceed *t*.
+1. *o1*=*o2*=1 and |(*a1*-*a2*)-(*c1*-*c2*)|,|(*b1*-*b2*)-(*d1*-*d2*)| do not exceed *t*, or
+2. *o1*=*o2*=0 and |(*a1*-*a2*)-(*d2*-*d1*)|,|(*b1*-*b2*)-(*c2*-*c1*)| do not exceed *t*.
 Informally, two matches are *(t, g)-mergeable* if they are "roughly adjacent" at the same ends in the precursor and product, where the meaning of "roughly adjacent" depends on the values of the parameters *t* and *g*.
 
-In the first part of the algorithm (applied to each pair of precursor and product sequences), a preliminary set of matches is extracted from the set of high-scoring pairs between a precursor and a product sequence provided by BLAST, but the algorithm enforces that the product region of no match in the set contains the product region of another.
-In the second part, the preliminary matches are indexed according to the order in which their corresponding product regions are encountered when reading the product sequence from the 5' to the 3' end. Furthermore, pointers and gaps are annotated in this part.
-In the third and last part, additional matches are extracted from the high-scoring pairs between the two sequences. These additional matches are artifically assigned the index of the preliminary match whose product region overlaps with their product region sufficiently (as defined below). Fragments of matches are annotated in this step, as well.
+In the first part of the algorithm (applied to each pair of precursor and product sequences), a preliminary set of matches is extracted from the set of high-scoring pairs between a precursor and a product sequence provided by BLAST, but the algorithm enforces that the product region of no match in the set contains the product region of another:
+```
+  1. Given a precursor and a product sequence, let *H* be the set of all high-scoring pairs between the two sequences of length at least *l*, and with bitscore and percent identity at least *b* and *q*, respectively, ordered by bitscore and percent identity in descending order.
+  2. Initialize empty set *A*.
+  2. One high-scoring pair from *H* at a time, do
+  3.  | check the size of the intersection of the product interval of the high-scoring pair with the complement of the product intervals of the members of *A* in the product sequence. If that number is less than *c*, skip remainder of loop body and continue with next member of *H*.
+  4.  | check if high-scoring pair can be merged with any member of *A*, or if the product intervals of members of *A* intersect the complement of the high-scoring pair's complement in the product sequence by less than *c*. In the first case, update the high-scoring pair to reflect the new merged match and remove the merged member from *A*; in the latter case, simply remove the respective member of *A*.
+  5.  | add high-scoring pair to *A*.
+  6. done
+  7. return *A* - the set of all preliminary matches between the two sequences.
+```
+Note that at the end of this algorithm, the product interval of no member of *A* contains the product interval of another.
+
+In the second part, the preliminary matches in *A* are indexed according to the order in which their corresponding product regions are encountered when reading the product sequence from the 5' to the 3' end. Furthermore, pointers and gaps are annotated in this part:
+```
+  1. Sort *A* according to the starting coordinate of their product intervals on the product sequence in ascending order.
+  2. Scan through *A* in the sorted order assign indices according to the matches' positions. While doing so check if the product intervals of consecutive matches are at least *u* basepairs apart, or overlap by at least *v* basepairs; whenever the first is true, annotate the region between the respective product intervals on the product sequence as a gap and whenever the latter is true annotate the overlapping region and the corresponding regions in the precursor sequence as pointers.
+```
+
+In the third and last part, additional matches are extracted from the high-scoring pairs between the two sequences. These additional matches are artifically assigned the index of the preliminary match whose product region overlaps with their product region sufficiently (as defined below). Fragments of matches are annotated in this step, as well:
+```
+  1. Let *H'* be the set of all high-scoring pairs between the two sequences which did not became (part of) preliminary matches in the first part and which are of length at least *l*, and have bitscore and percent identity at least *b'* and *q'*, respectively.
+  2. Initialize empty sets *A'*.
+  3. One high-scoring pair from *H'* at a time, do
+  4.  | Check if any members of *A'* can be merged with high-scoring pairs; whenever that is the case, update high-scoring pair to reflect the new merged match and remove the respective member of *A'*.
+  5.  | One preliminary match from *A* at a time, do
+  6.  |  | Let *N* be the size of the product interval of the preliminary match
+  7.  |  | Let *D* be the size of the intersection of the product intervals of the high-scoring pair and the preliminary match
+  8.  |  | If *D* >= r\**N*, then
+  9.  |  |  | add a copy of the high-scoring pair to *A'* as an additional match with index inherited from preliminary match
+ 10.  |  | else if *D* >= s\**N*, then
+ 11.  |  |  | add a copy of the high-scoring pair to *A'* as a fragment with index inherited from preliminary match
+ 12.  |  | fi
+ 13.  | done
+ 14.  | If no copy of the high-scoring pair was added to *A'*, then
+ 15.  |  | add a copy of the high-scoring pair to *A'* as a fragment with no index
+ 16.  | fi
+ 17. done
+ 18. return *A'* - the set of all additional matches and fragments between the two sequences.
+```
 
 
