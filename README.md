@@ -198,4 +198,15 @@ In the third and last part, additional matches are extracted from the high-scori
  18. return *A'* - the set of all additional matches and fragments between the two sequences.
 ```
 
+###### Properties Parameters
+**Minimum Coverage of Product Sequence for Arrangement Property Computation** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the arrangement properties of the arrangement between the two sequences to be computed.
 
+**Maximum Tolerance for Overlapping Precursor Intervals during Arrangement Property Computation** - (nonnegative integer; **DEFAULT**: 5) The maximum intersection size of the precursor intervals of two matches in an arrangement to be considered disjoint. Note that whenever the precursor interval of one matche is completely contained in the precursor interval of another match in an arrangement, then the two matches are not considered disjoint, independent from the value for this parameter, or the size of the intersection.
+
+**Maximum Number of Non Repeating and Non Overlapping Subarrangements for Arrangement Property Computation** - (positive integer; **DEFAULT**: 4) The maximum number of maximal subarrangements of an arrangement (maximal with the property of being nonrepeating and pairwise nonoverlapping) whose properties are considered in the arrangement property computation.
+
+**Complete** - (checkbox; **DEFAULT**: not checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must equal the set of indices of the overall arrangement, for the subarrangement to be considered nonscrambled; else, this property is not required.
+
+**Consecutive** - (checkbox; **DEFAULT**: checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must form a consecutive set of integers, for the subarrangement to be considered nonscrambled; else, this proeprty is not required.
+
+**Ordered** - (checkbox; **DEFAULT**: checked) If checked, the precursor intervals of the matches in a non repeating and non overlapping subarrangement of an arrangement, ordered by their starting coordinate, must occur in the same order, or complete reverse of the order the corresponding product intervals occur on the product sequence.
