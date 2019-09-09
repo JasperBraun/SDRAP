@@ -210,3 +210,18 @@ In the third and last part, additional matches are extracted from the high-scori
 **Consecutive** - (checkbox; **DEFAULT**: checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must form a consecutive set of integers, for the subarrangement to be considered nonscrambled; else, this proeprty is not required.
 
 **Ordered** - (checkbox; **DEFAULT**: checked) If checked, the precursor intervals of the matches in a non repeating and non overlapping subarrangement of an arrangement, ordered by their starting coordinate, must occur in the same order, or complete reverse of the order the corresponding product intervals occur on the product sequence.
+
+###### Output Parameters
+**Minimum Coverage of Product Sequence for Output** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the annotations resulting from the arrangement to be output.
+
+**Use SDRAP Aliases** - (checkbox; **DEFAULT**: not checked) If checked, SDRAP will output annotation with the DNA sequences labelled numerically in the order they were read into the program; else, SDRAP will use the primary identifiers listed in the input sequence files to refer to each sequence in its output.
+
+**Output Gap Annotations on Product Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of gaps on the product sequences; else, it will not.
+
+**Output Fragment Annotations on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of fragments on the precursor sequences; else, it will not.
+
+**Give Complementary Intervals to Precursor Intervals of Matches on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of intervals complementary to the precursor intervals of matches on the precursor sequences; else, it will not.
+
+**Minimum Length of Complementary Intervals** - (positive integer; **DEFAULT**: 4) minimum size of an interval in the complement the precursor intervals of the matches of an arrangement in a precursor sequence; for the interval to be included in the output.
+
+**Give a Summary of the Outcome** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output a table containing a range of numbers which reflect some key values which summarize the outcome of the computation (see Output).
