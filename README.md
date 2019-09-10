@@ -232,40 +232,40 @@ When SDRAP runs on a dataset, the pipeline creates a subdirectory to the annotat
 
 ###### Sequence Files
 
-**<database-name>_all_nucleotide.fasta** - Contains the nucleotide sequences of all precursor and all product sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters). Telomeres, if any, are masked as lower-case letters in the product sequences.
+**\<database-name\>_all_nucleotide.fasta** - Contains the nucleotide sequences of all precursor and all product sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters). Telomeres, if any, are masked as lower-case letters in the product sequences.
 
-**<database-name>_prec_nucleotide.fasta** - Contains the nucleotide sequences of all precursor sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters).
+**\<database-name\>_prec_nucleotide.fasta** - Contains the nucleotide sequences of all precursor sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters).
 
-**<database-name>_prod_nucleotide.fasta** - Contains the nucleotide sequences of all product sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters). Telomeres, if any, are masked as lower-case letters.
+**\<database-name\>_prod_nucleotide.fasta** - Contains the nucleotide sequences of all product sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters). Telomeres, if any, are masked as lower-case letters.
 
 ###### Annotation Files
 
 Note that all annotation files include annotations of high-scoring pairs, matches, fragments, eliminated sequences, pointers and gaps between a precursor and product sequence only when the region of the product sequence between the telomeres, if any, is covered by preliminary matches by at least a certain amount, as specified in the input parameters (see Optional parameters). All annotation files follow the BED file format.
 
-**<database-name>_prec_hsp.bed** - Contains the annotations of the precursor intervals of the high-scoring pairs on precursor sequences.
+**\<database-name\>_prec_hsp.bed** - Contains the annotations of the precursor intervals of the high-scoring pairs on precursor sequences.
 
-**<database-name>_prec_segments.bed** - Contains the annotations of the precursor intervals of the matches on precursor sequences.
+**\<database-name\>_prec_segments.bed** - Contains the annotations of the precursor intervals of the matches on precursor sequences.
 
-**<database-name>_prec_pointers.bed** - Contains the annotations of the portions of the precursor intervals of preliminary matches which are considered pointers.
+**\<database-name\>_prec_pointers.bed** - Contains the annotations of the portions of the precursor intervals of preliminary matches which are considered pointers.
 
-**<database-name>_prec_fragments.bed** - Contains the annotations of the precursor intervals of the fragments on precursor sequences.
+**\<database-name\>_prec_fragments.bed** - Contains the annotations of the precursor intervals of the fragments on precursor sequences.
 
-**<database-name>_prec_eliminated_sequences.bed** - Contains the annotations of the intervals complementary to the precursor intervals of matches in precursor sequences.
+**\<database-name\>_prec_eliminated_sequences.bed** - Contains the annotations of the intervals complementary to the precursor intervals of matches in precursor sequences.
 
-**<database-name>_prod_hsp.bed** - Contains the annotations of the product intervals of the high-scoring pairs on product sequences.
+**\<database-name\>_prod_hsp.bed** - Contains the annotations of the product intervals of the high-scoring pairs on product sequences.
 
-**<database-name>_prod_segments.bed** - Contains the annotations of the product intervals of the matches on product sequences.
+**\<database-name\>_prod_segments.bed** - Contains the annotations of the product intervals of the matches on product sequences.
 
-**<database-name>_prod_pointers.bed** - Contains the annotations of the portions of the product intervals of preliminary matches which are considered pointers.
+**\<database-name\>_prod_pointers.bed** - Contains the annotations of the portions of the product intervals of preliminary matches which are considered pointers.
 
-**<database-name>_gaps.bed** - Contains the annotations of the regions in the product sequences which are considered gaps.
+**\<database-name\>_gaps.bed** - Contains the annotations of the regions in the product sequences which are considered gaps.
 
 ###### Data Files
 
-**<database-name>_aliases.tsv** - A tab-delimited file containing the numeric identifier assigned to each sequence in the first column and the corresponding primary identifier specified in the input genome files in the second column.
+**\<database-name\>_aliases.tsv** - A tab-delimited file containing the numeric identifier assigned to each sequence in the first column and the corresponding primary identifier specified in the input genome files in the second column.
 
-**<database-name>_parameters.tsv** - A tab-delimited file containing a descriptor of each parameter (except for the MySQL passwor used) in the first column and the value of the parameter used during pipeline execution in the second column.
+**\<database-name\>_parameters.tsv** - A tab-delimited file containing a descriptor of each parameter (except for the MySQL passwor used) in the first column and the value of the parameter used during pipeline execution in the second column.
 
-**<database-name>_properties.tsv** - A tab-delimited file with header containing pairs of precursor and product sequences and the properties identified for their arrangement, as described in the header. (1 = true, 0 = false)
+**\<database-name\>_properties.tsv** - A tab-delimited file with header containing pairs of precursor and product sequences and the properties identified for their arrangement, as described in the header. (1 = true, 0 = false)
 
-**<database-name>_summary.tsv** - A tab-delimited file with descriptions of numbers associated with the pipeline execution in the first column and the corresponding values in the second column.
+**\<database-name\>_summary.tsv** - A tab-delimited file with descriptions of numbers associated with the pipeline execution in the first column and the corresponding values in the second column.
