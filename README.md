@@ -5,7 +5,7 @@ Brief description of software
 
 
 ## Prerequisites
-SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. Backwards compatibility cannot be guaranteed, so older and newer versions of these softwares may cause unexpected behaviors.
+SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. SDRAP makes use of the Basic Local Alignment Search Tool (BLAST). In particular, the pipeline was tested using the **blastn** command at version **2.2.31**. Backwards compatibility cannot be guaranteed, so older and newer versions of these softwares may cause unexpected behaviors.
 
 
 ## Installation
