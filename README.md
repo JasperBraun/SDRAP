@@ -1,7 +1,8 @@
 # SDRAP - Scrambled DNA Rearrangements Annotation Pipeline
-***UNDER CONSTRUCTION***
-
-Brief description of software
+Some organisms, such as the ciliate *Oxytricha trifallax*, have two types of nuclei encoding different genomes.
+During sexual reproduction, one of the nuclei, the somatic *macronucleus*, disintegrates and is replaced by the genetic material present in the other nucleus, the germline *micronucleus*.
+In order to build a functional macronucleus from the DNA in the micronucleus, DNA segments need to be extracted and rearranged.
+The *Scrambled DNA Rearrangements Annotation Pipeline* (*SDRAP*) is a web application which aligns DNA sequences from the two genomes, identifies matching regions between them and determines a number of properties related to and reflecting the intensity of the rearrangements necessary to obtain the macronucleus from the micronucleus.
 
 
 ## Prerequisites
