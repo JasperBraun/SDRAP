@@ -27,6 +27,7 @@ elif [[ $# -gt 0 ]]; then
 
 # if no errors detected, make the necessary modifications
 else
+  mkdir annotations
   chown -R $php_username input
   chown -R $php_username annotations
   chown -R $php_username php
