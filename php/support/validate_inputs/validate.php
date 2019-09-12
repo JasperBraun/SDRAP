@@ -30,7 +30,7 @@ function validate( array $raw_input, array $INPUT, array &$ERRORS, $BASE_DIRECTO
     $ERRORS['input']['prec'] = "Valid precursor sequence file is require_onced";
     $result = false;
   }  elseif ( ! is_file ( $BASE_DIRECTORY . "input/precursor/{$INPUT['PRECURSOR_FILENAME']}" ) ) {
-    $ERRORS['other'][] = "Could not find precursor sequence file " . $INPUT['PRECURSOR_FILENAME'] . " in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
+    $ERRORS['other'][] = "Could not find precursor sequence file " . $INPUT['PRECURSOR_FILENAME'] . " in the directory '" . $BASE_DIRECTORY . "input/precursor/' in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
     $result = false;
   }
 
@@ -38,7 +38,7 @@ function validate( array $raw_input, array $INPUT, array &$ERRORS, $BASE_DIRECTO
     $ERRORS['input']['prod'] = "Valid product sequence file is require_onced";
     $result = false;
   }  elseif ( ! is_file ( $BASE_DIRECTORY . "input/product/{$INPUT['PRODUCT_FILENAME']}" ) ) {
-    $ERRORS['other'][] = "Could not find product sequence file " . $INPUT['PRODUCT_FILENAME'] . " in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
+    $ERRORS['other'][] = "Could not find product sequence file " . $INPUT['PRODUCT_FILENAME'] . " in the directory '" . $BASE_DIRECTORY . "input/product/' in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
     $result = false;
   }
 

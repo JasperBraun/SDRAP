@@ -2,7 +2,7 @@
 /* part of SDRAP step; sanitizes and validates form inputs */
 
 // base directory for input, output and temporary files of the program
-$BASE_DIRECTORY = str_replace( "/php/sdrap/", "/", __DIR__ );
+$BASE_DIRECTORY = str_replace( "/php/sdrap", "/", __DIR__ );
 
 // parameters for blast; currently not userdefined to avoid command line injection
 $BLAST_PARAMETERS = "-task megablast -ungapped -lcase_masking -word_size 18 -dust no -max_hsps 10000 -max_target_seqs 10000";
