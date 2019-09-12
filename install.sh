@@ -4,7 +4,7 @@ set -o errexit
 
 doc_line="  To display documentation, execute: $0 help"
 php_username="apache"
-php_read_permissions="500"
+php_read_permissions="700"
 php_output_permissions="755"
 php_execute_permissions="700"
 
