@@ -16,9 +16,10 @@ function blast_sequences( array $INPUT, array &$ERRORS, array $DIRECTORIES, $BLA
   }
 
   // build blast database
-  exec ( "makeblastdb -in " . $DIRECTORIES['BLAST_PREC_SEQUENCE_FILE'] . " -parse_seqids -dbtype nucl", $blast_db_output, $blast_db_return_value );
+  $command = "makeblastdb -in " . $DIRECTORIES['BLAST_PREC_SEQUENCE_FILE'] . " -parse_seqids -dbtype nucl 2>&1";
+  $exec_result = exec ( $command, $blast_db_output, $blast_db_return_value );
   if ( $blast_db_return_value != 0 ) {
-    $ERRORS['other'][] = "Failed to build blast database with precursor sequences in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
+    $ERRORS['other'][] = "Failed to build blast database with precursor sequences with output " . $exec_result . "; " . json_encode( $blast_db_output ) . " to command " . $command . " in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
     return false;
   }
 

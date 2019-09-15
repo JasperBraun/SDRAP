@@ -4,9 +4,8 @@ set -o errexit
 
 doc_line="  To display documentation, execute: $0 help"
 php_username="apache"
-php_read_permissions="500"
 php_output_permissions="755"
-php_execute_permissions="700"
+php_execute_permissions="500"
 
 function usage {
   printf "%s\n" "Usage: $0"
@@ -33,7 +32,7 @@ else
   chown -R $php_username php
   chown -R $php_username annotations
   chown -R $php_username tmp
-  chmod -R $php_read_permissions input
+  chmod -R $php_execute_permissions input
   chmod -R $php_execute_permissions php
   chmod -R $php_output_permissions annotations
   chmod -R $php_output_permissions tmp

@@ -30,7 +30,7 @@ function process_sequences( array $INPUT, array &$ERRORS, $LINK, array $DIRECTOR
 
   // create and open blast sequence file
   $blast_sequence_file = fopen( $file_paths['blast_sequence_file_name'], "w" );
-  $file_permission = chmod( $file_paths['blast_sequence_file_name'], 0700 );
+  $file_permission = chmod( $file_paths['blast_sequence_file_name'], 0777 );
   if ( $blast_sequence_file === false ) {
     $ERRORS['other'][] = "Could not open file " . $file_paths['blast_sequence_file_name'] . " in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
     $result['success'] = false;
@@ -39,6 +39,7 @@ function process_sequences( array $INPUT, array &$ERRORS, $LINK, array $DIRECTOR
   if ( $file_permission === false ) {
     $ERRORS['other'][] = "Could not change permissions of file " . $file_paths['blast_sequence_file_name'] . " in " . basename(__FILE__,".php") . " near line " . __LINE__ . ".";
     $result['success'] = false;
+    return $result;
   }
 
   // read input sequence file
