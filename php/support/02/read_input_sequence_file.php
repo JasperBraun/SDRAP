@@ -57,9 +57,9 @@ function read_input_sequence_file( array $INPUT, array &$ERRORS, $MAX_NUM_TABLE_
 
     // initialize more variables
     if ( $delim === "" ) {
-      $current_header = array( trim( substr($seq_line, 1) ) );
+      $current_header = array( trim( substr($first_line, 1) ) );
     } else {
-      $current_header = array_map( 'trim', explode( $delim, substr($seq_line, 1) ) );
+      $current_header = array_map( 'trim', explode( $delim, substr($first_line, 1) ) );
     }
     $nuc_id += 1;
 

@@ -10,9 +10,13 @@ SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31
 
 
 ## Installation
-1 clone or download and unzip this repository into the desired directory (must be inside the website root directory of your machine to be accessible remotely via internet browser)
-2 open a terminal window and `cd` into the SDRAP directory
-3 run the command `./install` (might require sudo rights)
+1. clone or download and unzip this repository into the desired directory (must be inside the website root directory of your machine to be accessible remotely via internet browser)
+
+2. open a terminal window and `cd` into the SDRAP directory
+
+3. run the command `./install` (might require sudo rights)
+
+4. in some systems, the SELinux context of the tmp directory created in the SDRAP directory during the previous step must be changed to give apache sufficient privileges to work with the temporary files it creates. The exact context needed depends on the system, but most of the time, the following command `chcon -Rt httpd_user_content_t tmp` (might require sudo rights) while in the SDRAP directory should work.
 
 
 # Usage
