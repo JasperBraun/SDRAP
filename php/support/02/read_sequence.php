@@ -8,7 +8,7 @@ function read_sequence( $input_sequence_file, $delim ) {
     "last" => false,
     "sequence" => "",
     "length" => 0,
-    "next_header" => ""
+    "next_header" => array()
   );
 
   while ( ( $seq_line = fgets($input_sequence_file) ) !== false ) {
@@ -18,7 +18,7 @@ function read_sequence( $input_sequence_file, $delim ) {
     } else {
       $result['length'] = strlen($result['sequence']);
       if ( $delim === "" ) {
-        $result['next_header'] = trim( substr($seq_line, 1) );
+        $result['next_header'] = array( trim( substr($seq_line, 1) ) );
       } else {
         $result['next_header'] = array_map( 'trim', explode( $delim, substr($seq_line, 1) ) );
       }
