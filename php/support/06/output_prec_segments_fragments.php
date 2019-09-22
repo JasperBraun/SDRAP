@@ -131,7 +131,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
         if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH <= intval( $length ) ) {
 
           $prec_eliminated_sequences_row = array( $old_prec_id, $previous_segment_end + 1,
-              $length, $previous_segment_alias . "_none_0", "0", "+",
+              $length, "comp_" . $previous_segment_alias . "_none_0", "0", "+",
               $previous_segment_end + 1, $length, "255,0,153" );
 
           fwrite( $prec_eliminated_sequences_file, "\n" .
@@ -153,7 +153,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
       if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH < $next_segment_start ) {
 
         $prec_eliminated_sequences_row = array( $prec_id, $previous_segment_end + 1,
-            $next_segment_start - 1, $previous_segment_alias . "_" . $next_segment_alias, "0", "+",
+            $next_segment_start - 1, "comp_" . $previous_segment_alias . "_" . $next_segment_alias, "0", "+",
             $previous_segment_end + 1, $next_segment_start - 1, "255,0,153" );
 
         fwrite( $prec_eliminated_sequences_file, "\n" .
@@ -176,7 +176,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
     if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH <= intval( $length ) ) {
 
       $prec_eliminated_sequences_row = array( $prec_id, $previous_segment_end + 1,
-          $length, $previous_segment_alias . "_none_0", "0", "+",
+          $length, "comp_" . $previous_segment_alias . "_none_0", "0", "+",
           $previous_segment_end + 1, $length, "255,0,153" );
 
       fwrite( $prec_eliminated_sequences_file, "\n" .
