@@ -32,18 +32,18 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
   }
 
   // output precursor annotation of matches and fragments in BED format
-/*  $prec_segments_file = fopen( $DIRECTORIES['PREC_SEGMENTS_FILE'], "w" );
+  $prec_segments_file = fopen( $DIRECTORIES['PREC_SEGMENTS_FILE'], "w" );
   fwrite( $prec_segments_file, '#track name="prec_segments" description="precursor segments ' .
       'labelled pre_match_[prod-id]_[prod-start]_[prod-end]_[index]_[pre-cov]_[add-cov]_' .
       '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-      '[strongly-non-scrambled]" itemRgb-"On"' );*/
+      '[strongly-non-scrambled]" itemRgb-"On"' );
 
   if ( $OUTPUT_FRAGMENTS === true ) {
-/*    $prec_fragments_file = fopen( $DIRECTORIES['PREC_FRAGMENTS_FILE'], "w" );
+    $prec_fragments_file = fopen( $DIRECTORIES['PREC_FRAGMENTS_FILE'], "w" );
     fwrite( $prec_fragments_file, '#track name="prec_fragments" description="precursor fragments ' .
         'labelled frag_[prod-id]_[prod-start]_[prod-end]_[index]_[pre-cov]_[add-cov]_' .
         '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-        '[strongly-non-scrambled]" itemRgb-"On"' );*/
+        '[strongly-non-scrambled]" itemRgb-"On"' );
   }
 
   if ( $OUTPUT_GIVE_COMPLEMENT === true ) {
@@ -108,7 +108,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
           $segment['prec_segment_alias'] . $suffix, "0", $segment['orientation'],
           $segment['prec_start'], $segment['prec_end'], $color );
 
-/*      fwrite( $prec_segments_file, "\n" . implode( "\t", $prec_segments_row ) );*/
+      fwrite( $prec_segments_file, "\n" . implode( "\t", $prec_segments_row ) );
 
     } else if ( $OUTPUT_FRAGMENTS === true ) {
 
@@ -119,7 +119,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
           $segment['prec_segment_alias'] . $suffix, "0", $segment['orientation'],
           $segment['prec_start'], $segment['prec_end'], $color );
 
-/*      fwrite( $prec_fragments_file, "\n" . implode( "\t", $prec_fragments_row ) );*/
+      fwrite( $prec_fragments_file, "\n" . implode( "\t", $prec_fragments_row ) );
 
     }
 
@@ -168,8 +168,8 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
 
   }
   mysqli_free_result( $prec_segments_table );
-/*  fclose( $prec_segments_file );
-  if ( $OUTPUT_FRAGMENTS === true ) { fclose( $prec_fragments_file ); }*/
+  fclose( $prec_segments_file );
+  if ( $OUTPUT_FRAGMENTS === true ) { fclose( $prec_fragments_file ); }
   if ( $OUTPUT_GIVE_COMPLEMENT === true ) {
 
     // process last precursor sequence
