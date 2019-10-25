@@ -21,6 +21,7 @@ function add_vertex( $v, array &$vert_to_match, array &$E, &$non_overlapping, &$
       $E[$u][$v] = false;
       $new_adjacency_row[$u] = false;
       $non_repeating = false;
+      if ( $overlap > $PROPERTY_MAX_MATCH_OVERLAP ) { $non_overlapping = false; }
 
     } elseif ( $overlap > $PROPERTY_MAX_MATCH_OVERLAP ) {
 
