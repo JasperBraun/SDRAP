@@ -147,6 +147,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
       }
 
       $next_segment_start = (int) $segment['prec_start'];
+      $next_segment_end = (int) $segment['prec_end'];
       $next_segment_alias_split = explode( "_", $segment['prec_segment_alias'] );
       $next_segment_alias = $next_segment_alias_split[2] . "_" . $next_segment_alias_split[5];
 
@@ -161,9 +162,13 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
 
       }
 
-      $previous_segment_end = (int) $segment['prec_end'];
-      $previous_segment_alias = $next_segment_alias;
+      if ( $next_segment_end >= $previous_segment_end ) {
 
+        $previous_segment_end = $next_segment_end;
+        $previous_segment_alias = $next_segment_alias;
+
+      }
+      
     }
 
   }
