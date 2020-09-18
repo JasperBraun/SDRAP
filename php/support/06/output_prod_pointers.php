@@ -19,6 +19,7 @@ function output_prod_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
       ON P.`prec_nuc_id` = O.`prec_nuc_id`
       AND P.`prod_nuc_id` = O.`prod_nuc_id`
       WHERE C.`coverage` >= '{ $OUTPUT_MIN_COVERAGE }'
+      AND A.`is_primary` = 1
       ORDER BY P.`prod_nuc_id`, P.`prod_start` ASC;"
   );
   if ( $prod_pointers_table === false ) {
