@@ -1,4 +1,7 @@
 # SNAP - Scrambled Nucleic Acid Annotation Pipeline
+
+***README STILL UNDER CONSTRUCTION.***
+
 Some organisms, such as the ciliate *Oxytricha trifallax*, have two types of nuclei encoding different genomes.
 During sexual reproduction, one of the nuclei, the somatic *macronucleus*, disintegrates and is replaced by the genetic material present in the other nucleus, the germline *micronucleus*.
 In order to build a functional macronucleus from the DNA in the micronucleus, DNA segments need to be extracted and rearranged.
