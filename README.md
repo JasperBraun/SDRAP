@@ -1,135 +1,220 @@
-# SNAP - Scrambled Nucleic Acid Annotation Pipeline
-
-***README STILL UNDER CONSTRUCTION.***
-
-Some organisms, such as the ciliate *Oxytricha trifallax*, have two types of nuclei encoding different genomes.
-During sexual reproduction, one of the nuclei, the somatic *macronucleus*, disintegrates and is replaced by the genetic material present in the other nucleus, the germline *micronucleus*.
-In order to build a functional macronucleus from the DNA in the micronucleus, DNA segments need to be extracted and rearranged.
-The *Scrambled DNA Rearrangements Annotation Pipeline* (*SDRAP*) is a web application which aligns DNA sequences from the two genomes, identifies matching regions between them and determines a number of properties related to and reflecting the intensity of the rearrangements necessary to obtain the macronucleus from the micronucleus.
-
-
-## Prerequisites
-SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**, **MySQL 5.6.31** and **Apache 2.2.15**. SDRAP makes use of the Basic Local Alignment Search Tool (BLAST). In particular, the pipeline was tested using the **blastn** command at version **2.2.31**. Backwards compatibility cannot be guaranteed, so older and newer versions of these softwares may cause unexpected behaviors.
-
+# SDRAP - Scrambled DNA Rearrangement Annotation Pipeline
 
 ## Installation
-1. clone or download and unzip this repository into the desired directory (must be inside the website root directory of your machine to be accessible remotely via internet browser)
 
-2. open a terminal window and `cd` into the SDRAP directory
+### Prerequisites
 
-3. run the command `./install` (might require sudo rights)
+SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**,
+**MySQL 5.6.31** and **Apache 2.2.15**. SDRAP makes use of the Basic Local
+Alignment Search Tool (BLAST). In particular, the pipeline was tested using the
+**blastn** command of the BLAST+ software suite at version **2.2.31**. Backwards
+Compatibility with other versions of these softwares cannot be guaranteed, so
+older and newer versions of these softwares may cause unexpected behaviors.
 
-4. in some systems, the SELinux context of the tmp directory created in the SDRAP directory during the previous step must be changed to give apache sufficient privileges to work with the temporary files it creates. The exact context needed depends on the system, but most of the time, the following command `chcon -Rt httpd_user_content_t tmp` (might require sudo rights) while in the SDRAP directory should work.
+### Installation
 
+1. Clone or download and unpack this repository into the desired directory (must
+   be inside the website root directory of your machine to be accessible
+   remotely via internet browser)
+2. Open a terminal window and `cd` into the SDRAP directory
+3. Run the command `./install` (might require sudo rights)
+4. In some systems, the SELinux context of the tmp directory created in the
+   SDRAP directory during the previous step must be changed to give apache
+   sufficient privileges to work with the temporary files it creates. The exact
+   context needed depends on the system, but most of the time, the following
+   command `chcon -Rt httpd_user_content_t tmp` (might require sudo rights)
+   while in the SDRAP directory should work.
 
-# Usage
-Simply open up SDRAP in a browser, enter required parameters, select desired genome sequence files and click the "Annotate" button. The execution of the pipeline may take a few minutes to several hours depending on the size of the input dataset; make sure your browser does not time out during the execution of the pipeline.
+## Usage
 
+Simply open up SDRAP in a browser, enter required parameters, select desired
+genome sequence files and click the "Annotate" button. The execution of the
+pipeline may take a few minutes to several hours depending on the size of the
+input dataset; make sure your browser does not time out during the execution of
+the pipeline.
 
-## Input
-As input to the pipeline, the correct precursor and product sequence files must be selected (see Genome Sequence Files), required parameters must be specified (see Required Parameters), and if desired, optional parameters can be specified (see Optional Parameters).
+As input to the pipeline, the correct precursor and product sequence files must
+be selected (see [Input genome sequence files](#input-genome-sequence-files)),
+required parameters must be specified (see [Required parameters](#required-parameters)),
+and if desired, optional parameters can be specified (see [Optional parameters](#optional-parameters)).
 
+### Input genome sequence files
 
-###### Genome Sequence Files
-To add a sequence file for sequences in the precursor, open a terminal window `cd` into the SDRAP directory in a terminal window and run:
+To add a sequence file for sequences in the precursor, open a terminal window
+`cd` into the SDRAP directory in a terminal window and run:
 ```bash
 ./add-sequence-file.sh precursor <file>
 ```
-To add a sequence file for sequences in the product, open a terminal windot, `cd` into the SDRAP directory and run:
+To add a sequence file for sequences in the product, open a terminal window,
+`cd` into the SDRAP directory and run:
 ```bash
 ./add-sequence-file.sh product <file>
 ```
-The two commands may require sudo rights and any browser window with the SDRAP page loaded may need to be forcibly refreshed to see the newly added files in the list of options.
+The two commands may require sudo rights and any browser window with the SDRAP
+page loaded may need to be forcibly refreshed to see the newly added files in
+the list of options.
 
-Sequence files are accepted in .fasta and .fna format. Delimiters for the selected input files can be specified. SDRAP will break the description line of each nucleotide sequence into fields based on the specified delimiter and only consider the first field for future reference to the sequence. Therefore, please be sure to include a unique identifier as the first field in the description line of each nucleotide sequence across both the precursor and product sequence files.
+Sequence files are accepted in FASTA format (see [BLAST input formats](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=BlastHelp)).
+Delimiters for the selected input files can be specified. SDRAP will break the
+description line of each nucleotide sequence into fields based on the specified
+delimiter and only consider the first field for future reference to the
+sequence. Therefore, please be sure to include a unique identifier as the first
+field in the description line of each nucleotide sequence across both the
+precursor and product sequence files.
 
+### Required Parameters
 
-## Required Parameters
+#### MySQL Database
 
-
-###### MySQL Database
-**Hostname** - the host name, or IP address identifying the MySQL server which SDRAP should use. If using the MySQL server of the machine where SDRAP is located, leave this field as 'localhost'.
+**Hostname** - the host name, or IP address identifying the MySQL server which
+SDRAP should use. If using the MySQL server of the machine where SDRAP is
+located, leave this field as 'localhost'.
 
 **Username** - the MySQL username that SDDRAP should use.
 
-This user should have all privileges on the database with name specified below. We discourage the user to use a the MySQL root user or create a user with all privileges on all databases. Instead, we encourage creation of a new MySQL user solely for SDRAP. This can be done as follows:
+This user should have all privileges on the database with name specified below.
+We discourage the user to use a the MySQL root user or create a user with all
+privileges on all databases. Instead, we encourage creation of a new MySQL user
+solely for SDRAP. This can be done as follows:
 
-1 log into the MySQL server with a user that has sufficient privileges to create users and grant privileges.
-
-2 execute:
-```mysql
+1. Log into the MySQL server with a user that has sufficient privileges to create
+   users and grant privileges.
+2. Execute in MySQL with sufficient permissions:
+```sql
 CREATE USER '<username>'@'localhost'
 IDENTIFIED BY '<password>';
 ```
 
-3 then:
-```mysql
+3. Execute in MySQL with sufficient permissions:
+```sql
 GRANT ALL PRIVILEGES ON `<database-name>`.*
 TO '<username>'@'localhost';
 ```
 
-In the above two MySQL commands, replace `'localhost'` by `'%'` if intending for SDRAP to log into the MySQL server remotely.
-Also, if you intend to use SDRAP multiple times, and do not want to grant privileges to each database individually, you can come up with a common prefix for all the databases SDRAP will create and grant all privileges on all databases with that prefix by replacing `<database-name>.*` by `<prefix>%.*`. Then, whenever specifying the *Database Name* SDRAP should use, make sure it has the specified prefix.
-For security purposes, you should ensure that only the databases created by SDRAP on the MySQL server will have the specified prefix.
+In the above two MySQL commands, replace `'localhost'` by `'%'` if intending for
+SDRAP to log into the MySQL server remotely. Also, if you intend to use SDRAP
+multiple times, and do not want to grant privileges to each database
+individually, you can come up with a common prefix for all the databases SDRAP
+will create and grant all privileges on all databases with that prefix by
+replacing `<database-name>.*` by `<prefix>%.*`. Then, whenever specifying the
+database name SDRAP should use, make sure it has the specified prefix. For
+security purposes, you should ensure that only the databases created by SDRAP on
+the MySQL server will have the specified prefix.
 
 **Password** - the password of the MySQL user specified in the previous field.
 
-**Database Name** - the name SDRAP should give the MySQL database which will be generated. The MySQL *Username* given above should have all privileges on this database, as explained in the *Username* parameter description above.
-
-
-###### Organism Information
-While these parameters are listed as required parameters, they can be left blank because they do not affect the computation. However, we highly recommend specifying the values of these parameters to be able to reference which organism the data refers to.
-
-**Genus** - the name of the genus of the organism (taxonomic rank below family and above species)
-
-**Species** - the name of the species of the organism (taxonomic rank below genus and above Strain)
-
-**Strain** - the name of the strain of the organism (intraspecific taxonomic rank)
-
-**Taxonomy ID** - the Taxonomy ID of the organism (taxon identifier in NCBI Taxonomy Database)
-
-
-###### Genome Assemblies
-
-**Precursor Genome** - precursor sequence file of the organism. See Genome Sequence Files above for more information on how to add files to the list of choices, how to remove them, and the necessary format of the files.
-
-**Precursor Sequence Description Delimiter** - delimiter for the selected precursor sequence file. SDRAP will break the description line of each nucleotide sequence in the file into fields based on the specified delimiter and only consider the first field for future reference to the sequence. Please be sure to include a unique identifier as the first field in the description line of each nucleotide sequence across both the precursor and product sequence files.
-
-**Product Genome** - product sequence file of the organism. See Genome Sequence Files above for more information on how to add files to the list of choices, how to remove them, and the necessary format of the files.
-
-**Product Sequence Description Delimiter** - delimiter for the selected product sequence file. SDRAP will break the description line of each nucleotide sequence in the file into fields based on the specified delimiter and only consider the first field for future reference to the sequence. Please be sure to include a unique identifier as the first field in the description line of each nucleotide sequence across both the precursor and product sequence files.
-
-**Telomere Pattern** - short nucleotide sequence whose repetition characterizes the telomeres of the organism. For example, if the telomeres of the organism consist of repetitions of the nucleotide sequence TTAGGG, then the value of the *Telomere Pattern* parameter should be specified as TTAGGG.
-
-
-## Optional Parameters
-
-###### Telomere Annotation Parameters
-**Mismatch Ratio Limit** - (decimal number between 0 and 1; **DEFAULT**: 0.2; *e* in algorithmic description below) A low value for this parameter permits fewer mismatches relative to the current expansion *E* of the telomere at any step during the algorithm, while a high value allows for more mismatches. Setting the value of this parameter to 0, effectively forbids mismatches and leads to the discontinuation of the telomere expansion as soon as one mismatch is encountered. Setting the value of this parameter to 1 ignores mismatches while expanding the telomere as long as all other conditions are met.
-
-**Limit of Excess Mismatches in Buffer** - (nonnegative integer; **DEFAULT**: 4; *h* in algorithmic description below) Generally, a low value for this parameter permits fewer mismatches close together without being "balanced out" by basepairs conforming to the ideal telomere. Setting the value of this parameter to 0, effectively forbids mismatches and leads to the discontinuation of the telomere expansion as soon as one mismatch is encountered. Setting the value of this parameter to a high number allows for longer substrings of the telomere to deviate from the ideal telomere.
-
-**Maximum Length** - (nonnegative integer; **DEFAULT**: 100; *l* in algorithmic description below) The telomere cannot be expanded to a sequence longer than the value of this parameter. If the combined length of the buffer *B* and the current expansion *E* of the telomere exceed this maximum length, the buffer is discarded and expansion is halted. If the value of this parameter is set to an integer less than the length of the *Telomere Pattern*, the algorithm will never return a telomere.
-
-**Maximum Distance to Sequence End** - (nonnegative integer; **DEFAULT**: 100; *o* in algorithmic description below) The distance between the telomere and the corresponding end of the sequence cannot exceed the value of this parameter. Setting the value of this parameter to 0 will forbid the presence of nontelomeric portions at those ends of the sequence where telomeres were found and lead to the exclusion of any such telomeres from the telomere annotation.
-
-**Minimum Length** - (nonnegative integer; **DEFAULT**: 12; *m* in algorithmic description below) Any telomeric sequence found by the algorithm which does not have a length of at least the value of this parameter is excluded from the algorithm. If the value of this parameter is set to a value less than or equal to the length of the *Telomere Pattern*, the algorithm will only return telomeres at least as long as the *Telomere Pattern*.
-
-To understand the meaning of these parameters and the effect their values have on the outcome of the computation, one may first need to understand the algorithm by which SDRAP annotates telomeres. The algorithm is described here at a high level (we use variables *o*, *l*, *e*, *h*, and *m* referenced in the description of the corresponding parameters above):
-```
-Find first occurrence of a cyclic permutation of *Telomere Pattern* at most *o* base pairs from the end of the DNA sequence and call it *E* (return no telomere if none was found)
-One base pair adjacent to the current expansion *E* of the telomere at a time, do
- | add base pair to a buffer *B*
- | if the concatenation of *E* and *B* exceed *l*, break the loop
- | if the ratio between the Levenshtein distance *D* between the concatenation of E and B and an ideal telomeric sequence consisting of repititions of the *Telomere Pattern* over the combined length of *E* and *B* exceeds $e$, break the loop
- | if the number *N* of base pairs in $B$ whose addition caused the Levenshtein distance computed in the previous step to increase outnumber those *M* base pairs in *B* that didn't cause an increase by more than $h$, break the loop
- | if *M*>=*N*, add *E* to *B*
-done
-if *E* has length at least *m*, return *E* as the telomere
+SDRAP will connect to the MySQL server using the PHP command:
+```php
+mysqli_connect(<hostname>, <username>, <password>);
 ```
 
+**Database Name** - the name SDRAP should give the MySQL database which will be
+generated. The MySQL *Username* given above should have all privileges on this
+database, as explained in the *Username* parameter description above.
 
-###### Arrangement Annotation Parameters
+#### Organism Information
+
+While these parameters are listed as required parameters, they can be left blank
+because they do not affect the computation. However, I highly recommend
+specifying the values of these parameters to be able to reference which organism
+the data refers to.
+
+**Genus** - the name of the genus of the organism (taxonomic rank below family
+and above species)
+
+**Species** - the name of the species of the organism (taxonomic rank below
+genus and above Strain)
+
+**Strain** - the name of the strain of the organism (intraspecific taxonomic
+rank)
+
+**Taxonomy ID** - the Taxonomy ID of the organism (taxon identifier in NCBI
+Taxonomy Database)
+
+#### Genome Assemblies
+
+**Precursor Genome** - precursor sequence file of the organism. See Genome
+Sequence Files above for more information on how to add files to the list of
+choices, how to remove them, and the necessary format of the files.
+
+**Precursor Sequence Description Delimiter** - delimiter for the selected
+precursor sequence file. SDRAP will break the description line of each
+nucleotide sequence in the file into fields based on the specified delimiter and
+only consider the first field for future reference to the sequence. Please be
+sure to include a unique identifier as the first field in the description line
+of each nucleotide sequence across both the precursor and product sequence
+files.
+
+**Product Genome** - product sequence file of the organism. See Genome Sequence
+Files above for more information on how to add files to the list of choices, how
+to remove them, and the necessary format of the files.
+
+**Product Sequence Description Delimiter** - delimiter for the selected product
+sequence file. SDRAP will break the description line of each nucleotide sequence
+in the file into fields based on the specified delimiter and only consider the
+first field for future reference to the sequence. Please be sure to include a
+unique identifier as the first field in the description line of each nucleotide
+sequence across both the precursor and product sequence files.
+
+**Telomere Pattern** - short nucleotide sequence whose repetition characterizes
+the telomeres of the organism. For example, if the telomeres of the organism
+consist of repetitions of the nucleotide sequence TTAGGG, then the value of the
+*Telomere Pattern* parameter should be specified as TTAGGG.
+
+### Optional Parameters
+
+#### Telomere Annotation Parameters
+
+![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters.png)
+
+* `S` - (string over alphabet {`A`, `C`, `G`, `T`})
+* `t` - Telomere Pattern (string over alphabet {`A`, `C`, `G`, `T`})
+* `e` - Relative Error Limit (real number between 0 and 1)
+* `h` - Cumulative Error Limit (non-negative integer)
+* `l` - Maximum Length (positive integer)
+* `o` - Maximum Distance to Sequence End (non-negative integer)
+* `m` - Minimum Length (non-negative integer)
+
+**Relative Error Limit** - (Real number between 0 and 1; `e` in algorithm
+description) Maximum Levenshtein distance between the annotated telomere and a
+flawless telomeric sequence, relative to length of current expansion of telomere
+at any time during the telomere annotation algorithm. A low value for this
+parameter enforces higher sequence similarity, both locally within the annotated
+telomere and for the entire telomere. Setting the value of this parameter to 0,
+effectively enforces a percent identity of 100 to a flawless telomeric sequence.
+
+**Cumulative Error Limit** - (non-negative integer; `h` in algorithm
+description) Maximum number of additions of nucleotides during telomere
+expansion which cause an increase in the Levensthein distance between the
+annotated telomere and a flawless telomeric sequence. This cumulative error is
+reduced every time a nucleotide is added during telomere expansion which does
+not increase the Levensthein distance, but never drops below 0. A low value for
+this parameter permits fewer flaws close together without being "balanced out"
+by basepairs conforming to the ideal telomere. Setting the value of this
+parameter to 0, effectively enforces a percent identity of 100 to a flawless
+telomeric sequence.
+
+**Maximum Length** - (positive integer; `l` in algorithm description) Maximum
+length of a telomere. When a telomere expands to a length longer than this
+parameter's value, it is reset to the last form during telomere detection where
+the cumulative error (`H`) was 0. If the value of this parameter is set to an
+integer less than the length of the parameter *Telomere Pattern*, the algorithm
+will never return a telomere.
+
+**Maximum Distance to Sequence End** - (non-negative integer; `o` in algorithm
+description) The maximum distance between a telomere and the end of a product
+sequence. Setting the value of this parameter to 0 will forbid the presence of
+nontelomeric portions at those ends of the sequence where telomeres were found
+and lead to the exclusion of any such telomeres from the telomere annotation.
+
+**Minimum Length** - (non-negative integer; `m` in algorithm description) The
+minimum length of a telomere. If the value of this parameter is set to a value
+less than or equal to the length of the parameter *Telomere Pattern*, the
+length of the parameter *Telomere Pattern* becomes the effective minimum length.
+
+
+
+#### Arrangement Annotation Parameters
 **Minimum HSP Length for Match Annotation** - (positive integer; **DEFAULT**: 18; *l* in algorithmic description below) The value of this parameter determines the minimum length a high-scoring pair provided by BLAST must have to be considered for match annotation.
 
 **Minimum Bitscore for Preliminary Match Annotation** - (nonnegative integer; **DEFAULT**: 49; *b* in algorithmic description below) The value of this parameter determines the minimum bitscore a high-scoring pair provided by BLAST must have to be considered for preliminary match annotation.
@@ -206,7 +291,7 @@ In the third and last part, additional matches are extracted from the high-scori
  18. return *A'* - the set of all additional matches and fragments between the two sequences.
 ```
 
-###### Properties Parameters
+#### Properties Parameters
 **Minimum Coverage of Product Sequence for Arrangement Property Computation** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the arrangement properties of the arrangement between the two sequences to be computed.
 
 **Maximum Tolerance for Overlapping Precursor Intervals during Arrangement Property Computation** - (nonnegative integer; **DEFAULT**: 5) The maximum intersection size of the precursor intervals of two matches in an arrangement to be considered disjoint. Note that whenever the precursor interval of one matche is completely contained in the precursor interval of another match in an arrangement, then the two matches are not considered disjoint, independent from the value for this parameter, or the size of the intersection.
@@ -219,7 +304,7 @@ In the third and last part, additional matches are extracted from the high-scori
 
 **Ordered** - (checkbox; **DEFAULT**: checked) If checked, the precursor intervals of the matches in a non repeating and non overlapping subarrangement of an arrangement, ordered by their starting coordinate, must occur in the same order, or complete reverse of the order the corresponding product intervals occur on the product sequence.
 
-###### Output Parameters
+#### Output Parameters
 **Minimum Coverage of Product Sequence for Output** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the annotations resulting from the arrangement to be output.
 
 **Use SDRAP Aliases** - (checkbox; **DEFAULT**: not checked) If checked, SDRAP will output annotation with the DNA sequences labelled numerically in the order they were read into the program; else, SDRAP will use the primary identifiers listed in the input sequence files to refer to each sequence in its output.
@@ -233,6 +318,76 @@ In the third and last part, additional matches are extracted from the high-scori
 **Minimum Length of Complementary Intervals** - (positive integer; **DEFAULT**: 4) minimum size of an interval in the complement the precursor intervals of the matches of an arrangement in a precursor sequence; for the interval to be included in the output.
 
 **Give a Summary of the Outcome** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output a table containing a range of numbers which reflect some key values which summarize the outcome of the computation (see Output).
+
+
+## Background
+
+Some organisms, such as the ciliate *Oxytricha trifallax*, have two types of
+nuclei encoding different genomes. During sexual reproduction, one of the
+nuclei, the somatic *macronucleus*, disintegrates and is replaced by the genetic
+material present in the other nucleus, the germline *micronucleus*. In order to
+build a functional macronucleus from the DNA in the micronucleus, DNA segments
+need to be extracted and rearranged. The *Scrambled DNA Rearrangement Annotation
+Pipeline* (*SDRAP*) (pronounced like "strap") is a web application which aligns
+DNA sequences from the two genomes, identifies matching regions between them and
+determines a number of properties related to and reflecting the intensity of the
+rearrangements necessary to obtain the macronucleus from the micronucleus.
+
+## Algorithm
+
+### Telomere detection algorithm
+
+Here the variables `t`, `o`, `l`, `e`, `h`, and `m` are referenced, which refer
+to the corresponding [telomere annotation parameters](#telomere-annotation-parameters).
+
+The algorithm takes as input:
+* `S` - Product sequence (string over alphabet {`A`, `C`, `G`, `T`})
+* `t` - Telomere pattern (string over alphabet {`A`, `C`, `G`, `T`})
+* `e` - Relative error limit (real number between 0 and 1)
+* `h` - Cumulative error limit (non-negative integer)
+* `l` - Maximum length (positive integer)
+* `o` - Maximum distance to sequence end (non-negative integer)
+* `m` - Minimum length (non-negative integer)
+
+The algorithm returns:
+* `false` if no telomere was detected
+* Substring of `S` representing detected telomere at 5' end, otherwise
+
+1. Find first occurrence of a cyclic permutation `t'` of `t` at most `o` base
+   pairs from the 5' end of `S` and set `E <- t'` (return `false` if none was
+   found)
+2. Create a flawless telomeric sequence `F` for comparison (`F` is the sequence
+   obtained by concatenating `t` with itself ceiling of `(l + o) / |t|` times
+   and then cyclically permuting it in such a way that the cyclic permutation
+   `t'` detected in `S` in step 1 appears at the same position in `F`).
+3. Set `B` to be an empty buffer string, set `H <- 0`, set `D_old <- 0`.
+4. Repeat until `|B| + |E| = l`:
+   4a. Add predecessor of the concatenation of `B` and `E` in `S` to the front
+       of `B`.
+   4b. Compute the Levensthein distance `D_new` between the concatenated
+       substring `BE` of `S` with the corresponding substring of `F`.
+   4c. If `D_new / |BE| > e`, end the loop.
+   4d. If `D_new > D_old`, set `H <- H + 1`.
+   4e. If `D_new <= D_old`, set `H <- max(0, H - 1)`.
+   4f. If `H = 0`, set `E <- BE` and `H <- empty`.
+   4g. Set `D_old <- D_new`.
+5. Repeat analogous versions of steps 3. and 4. to add basepairs to the right of
+   `E` in `S`.
+6. If `|E| >= m`, return `E`, else return `false`.
+
+Telomeres at the 3' end of product sequences are detected by applying the
+algorithm to the reverse complement of the suffix of length `o + l` of `S`.
+
+
+
+
+
+
+
+
+
+
+
 
 ## Output
 
