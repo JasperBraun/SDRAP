@@ -373,15 +373,15 @@ The algorithm returns:
    `t'` detected in `S` in step 1 appears at the same position in `F`).
 3. Set `B` to be an empty buffer string, set `H <- 0`, set `D_old <- 0`.
 4. Repeat until `|B| + |E| = l`:
-   4a. Add predecessor of the concatenation of `B` and `E` in `S` to the front
-       of `B`.
-   4b. Compute the Levensthein distance `D_new` between the concatenated
-       substring `BE` of `S` with the corresponding substring of `F`.
-   4c. If `D_new / |BE| > e`, end the loop.
-   4d. If `D_new > D_old`, set `H <- H + 1`.
-   4e. If `D_new <= D_old`, set `H <- max(0, H - 1)`.
-   4f. If `H = 0`, set `E <- BE` and `H <- empty`.
-   4g. Set `D_old <- D_new`.
+   1. Add predecessor of the concatenation of `B` and `E` in `S` to the front
+      of `B`.
+   2. Compute the Levensthein distance `D_new` between the concatenated
+      substring `BE` of `S` with the corresponding substring of `F`.
+   3. If `D_new / |BE| > e`, end the loop.
+   4. If `D_new > D_old`, set `H <- H + 1`.
+   5. If `D_new <= D_old`, set `H <- max(0, H - 1)`.
+   6. If `H = 0`, set `E <- BE` and `H <- empty`.
+   7. Set `D_old <- D_new`.
 5. Repeat analogous versions of steps 3. and 4. to add basepairs to the right of
    `E` in `S`.
 6. If `|E| >= m`, return `E`, else return `false`.
