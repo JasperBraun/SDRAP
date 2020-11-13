@@ -165,15 +165,7 @@ consist of repetitions of the nucleotide sequence TTAGGG, then the value of the
 
 #### Telomere Annotation Parameters
 
-![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters.png)
-
-* `S` - (string over alphabet {`A`, `C`, `G`, `T`})
-* `t` - Telomere Pattern (string over alphabet {`A`, `C`, `G`, `T`})
-* `e` - Relative Error Limit (real number between 0 and 1)
-* `h` - Cumulative Error Limit (non-negative integer)
-* `l` - Maximum Length (positive integer)
-* `o` - Maximum Distance to Sequence End (non-negative integer)
-* `m` - Minimum Length (non-negative integer)
+![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters.png =250x250)
 
 **Relative Error Limit** - (Real number between 0 and 1; `e` in algorithm
 description) Maximum Levenshtein distance between the annotated telomere and a
