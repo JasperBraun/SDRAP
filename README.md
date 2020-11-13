@@ -167,41 +167,60 @@ consist of repetitions of the nucleotide sequence TTAGGG, then the value of the
 
 ![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters.png)
 
-**Relative Error Limit** - (Real number between 0 and 1; `e` in algorithm
-description) Maximum Levenshtein distance between the annotated telomere and a
-flawless telomeric sequence, relative to length of current expansion of telomere
-at any time during the telomere annotation algorithm. A low value for this
-parameter enforces higher sequence similarity, both locally within the annotated
-telomere and for the entire telomere. Setting the value of this parameter to 0,
+##### Relative Error Limit
+
+* Real number between 0 and 1
+* `e` in algorithm description
+
+Maximum Levenshtein distance between the annotated telomere and a flawless
+telomeric sequence, relative to length of current expansion of telomere at any
+time during the telomere annotation algorithm. A low value for this parameter
+enforces higher sequence similarity, both locally within the annotated telomere
+and for the entire telomere. Setting the value of this parameter to 0,
 effectively enforces a percent identity of 100 to a flawless telomeric sequence.
 
-**Cumulative Error Limit** - (non-negative integer; `h` in algorithm
-description) Maximum number of additions of nucleotides during telomere
-expansion which cause an increase in the Levensthein distance between the
-annotated telomere and a flawless telomeric sequence. This cumulative error is
-reduced every time a nucleotide is added during telomere expansion which does
-not increase the Levensthein distance, but never drops below 0. A low value for
-this parameter permits fewer flaws close together without being "balanced out"
-by basepairs conforming to the ideal telomere. Setting the value of this
-parameter to 0, effectively enforces a percent identity of 100 to a flawless
-telomeric sequence.
+##### Cumulative Error Limit
 
-**Maximum Length** - (positive integer; `l` in algorithm description) Maximum
-length of a telomere. When a telomere expands to a length longer than this
-parameter's value, it is reset to the last form during telomere detection where
-the cumulative error (`H`) was 0. If the value of this parameter is set to an
-integer less than the length of the parameter *Telomere Pattern*, the algorithm
-will never return a telomere.
+* non-negative integer
+* `h` in algorithm description
 
-**Maximum Distance to Sequence End** - (non-negative integer; `o` in algorithm
-description) The maximum distance between a telomere and the end of a product
-sequence. Setting the value of this parameter to 0 will forbid the presence of
+Maximum number of additions of nucleotides during telomere expansion which cause
+an increase in the Levensthein distance between the annotated telomere and a
+flawless telomeric sequence. This cumulative error is reduced every time a
+nucleotide is added during telomere expansion which does not increase the
+Levensthein distance, but never drops below 0. A low value for this parameter
+permits fewer flaws close together without being "balanced out" by basepairs
+conforming to the ideal telomere. Setting the value of this parameter to 0,
+effectively enforces a percent identity of 100 to a flawless telomeric sequence.
+
+##### Maximum Length
+
+* positive integer
+* `l` in algorithm description
+
+Maximum length of a telomere. When a telomere expands to a length longer than
+this parameter's value, it is reset to the last form during telomere detection
+where the cumulative error (`H`) was 0. If the value of this parameter is set to
+an integer less than the length of the parameter *Telomere Pattern*, the
+algorithm will never return a telomere.
+
+##### Maximum Distance to Sequence End
+
+* non-negative integer
+* `o` in algorithm description
+
+The maximum distance between a telomere and the end of a product sequence.
+Setting the value of this parameter to 0 will forbid the presence of
 nontelomeric portions at those ends of the sequence where telomeres were found
 and lead to the exclusion of any such telomeres from the telomere annotation.
 
-**Minimum Length** - (non-negative integer; `m` in algorithm description) The
-minimum length of a telomere. If the value of this parameter is set to a value
-less than or equal to the length of the parameter *Telomere Pattern*, the
+##### Minimum Length
+
+* non-negative integer
+* `m` in algorithm description
+
+The minimum length of a telomere. If the value of this parameter is set to a
+value less than or equal to the length of the parameter *Telomere Pattern*, the
 length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
 
