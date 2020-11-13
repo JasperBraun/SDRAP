@@ -165,7 +165,7 @@ consist of repetitions of the nucleotide sequence TTAGGG, then the value of the
 
 #### Telomere Annotation Parameters
 
-![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters | width=100)
+![Telomere annotation parameters input fields in the web application interface.](https://github.com/JasperBraun/SDRAP/blob/master/docs/images/telomere_annotation_parameters.png | width=100)
 
 **Relative Error Limit** - (Real number between 0 and 1; `e` in algorithm
 description) Maximum Levenshtein distance between the annotated telomere and a
