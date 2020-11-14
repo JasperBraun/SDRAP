@@ -264,6 +264,25 @@ length of the parameter *Telomere Pattern* becomes the effective minimum length.
 ---
 
 #### Arrangement Annotation Parameters
+
+##### Tolerance for Discrepancies Between Relative Positions of Precursor and Product Intervals for HSP Merging
+
+* non-negative integer
+* `t` in algorithm description
+
+The value of this parameter determines the maximum discrepancy between the
+relative positions of the corresponding end points of the precursor and product
+regions of two alignments, for them to be considered for merging.
+
+##### Maximum Gap Length for HSP Merging
+
+* non-negative integer
+* `d` in algorithm description below
+
+The maximum number of basepairs between the precursor intervals and between the
+product intervals (separately) allowed for two matches corresponding to these
+intervals to be considered for merging.
+
 **Minimum HSP Length for Match Annotation** - (positive integer; **DEFAULT**: 18; *l* in algorithmic description below) The value of this parameter determines the minimum length a high-scoring pair provided by BLAST must have to be considered for match annotation.
 
 **Minimum Bitscore for Preliminary Match Annotation** - (nonnegative integer; **DEFAULT**: 49; *b* in algorithmic description below) The value of this parameter determines the minimum bitscore a high-scoring pair provided by BLAST must have to be considered for preliminary match annotation.
@@ -272,9 +291,7 @@ length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
 **Minimum Additional Base Pair Coverage to Qualify for Preliminary Match Annotation** - (nonnegative integer; **DEFAULT**: 4; *c* in algorithmic description below) The value of this parameter determines the number of base pairs a high-scoring pair provided by BLAST must cover, and which are not already covered by previously considered high-scoring pairs, or merged high-scoring pairs, to be considered for preliminary match annotation.
 
-**Tolerance for Discrepancies Between Relative Positions of Precursor and Product Intervals for HSP Merging** - (nonnegative integer; **DEFAULT**: 8; *t* in algorithmic description below) The value of this parameter determines the maximum discrepancy between the relative positions of the corresponding end points of the precursor and product regions of two high-scoring pairs provided by BLAST, for them to be considered for merging.
 
-**Maximum Gap Length for HSP Merging** - (nonnegative integer; **DEFAULT**: 3; *g* in algorithmic description below) The maximum number of basepairs between the precursor intervals and between the product intervals (separately) allowed for two matches corresponding to these intervals to be considered for merging.
 
 **Minimum Base Pair Length for Gap Annotation** - (positive integer; **DEFAULT**: 4; *u* in algorithmic description below) The minimum number of basepairs between two consecutive product intervals of preliminary matches for the region to be annotated as a gap.
 
@@ -399,7 +416,7 @@ max(0, max(i1, i2) - min(j1, j2) - 1, max(k1, k2) - min(k1, k2) - 1)
 
 ![Illustration of distance between two alignments.](docs/images/alignment_merging_distance.png)
 
-The shift between them is:
+The ***shift*** between them is:
 ```Py
 max􏰍􏰛(i1 −i2)−(k1 −k2)􏰛, 􏰛(j1 −j2)−(l1 −l2)􏰛􏰎, if o1 = o2 = '+'
 max􏰍􏰛(i1 −i2)−(l2 −l1)􏰛, 􏰛(j1 −j2)−(k2 −k1)􏰛􏰎, if o1 = o2 = '-'
@@ -407,6 +424,12 @@ undefined, if o1 != o2
 ```
 
 ![Illustration of shift of a pair of alignments.](docs/images/alignment_merging_shift.png)
+
+For two non-negative integers `t` and `d`, `M1` and `M2` are
+***(`t`, `d`)-mergeable*** if:
+1. `o1 = o2`, and
+2. distance between `M1` and `M2` is at most `d`, and
+3. shift between `M1` and `M2` is at most `t`.
 
 ---
 
