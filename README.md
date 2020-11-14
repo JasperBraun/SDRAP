@@ -74,6 +74,8 @@ precursor and product sequence files.
 
 #### MySQL database
 
+![MySQL database parameter input fields in the web application interface.](docs/images/input_fields_mysql_database.png)
+
 ##### Hostname
 
 The host name, or IP address identifying the MySQL server which SDRAP should
@@ -130,6 +132,8 @@ explained in the *Username* parameter description above.
 
 #### Organism information
 
+![Organism information input fields in the web application interface.](docs/images/input_fields_organism_information.png)
+
 While these parameters are listed as required parameters, they can be left blank
 because they do not affect the computation. However, I highly recommend
 specifying the values of these parameters to be able to reference which organism
@@ -157,6 +161,8 @@ Database).
 ---
 
 #### Genome assemblies
+
+![Genome assemblies input fields in the web application interface.](docs/images/input_fields_genome_assemblies.png)
 
 ##### Precursor genome
 
@@ -191,7 +197,7 @@ precursor and product sequence files.
 ##### Telomere motif
 
 * String over the alphabet {`A`, `C`, `G`, `T`}
-* `P` in [telomere detection algorithm](#telomere-detection-algorithm)
+* `P` in algorithm description
 
 Short nucleotide sequence motif whose tandem-repeats characterizes the telomeres
 of the organism. For example, if the telomeres of the organism consist of
@@ -204,7 +210,7 @@ Pattern* parameter should be specified as TTAGGG.
 
 #### Telomere detection
 
-![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters.png)
+![Telomere detection parameter input fields in the web application interface.](docs/images/input_fields_telomere_detection.png)
 
 ##### Max relative error
 
@@ -266,6 +272,8 @@ length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
 #### Alignment merging
 
+![Alignment merging parameter input fields in the web application interface.](docs/images/input_fields_alignment_merging.png)
+
 ##### Max shift
 
 * non-negative integer
@@ -287,6 +295,8 @@ intervals to be considered for merging.
 ---
 
 #### Preliminary annotation
+
+![Preliminary annotation parameter input fields in the web application interface.](docs/images/input_fields_preliminary_annotation.png)
 
 ##### Min alignment length
 
@@ -324,6 +334,8 @@ must cover, and which are not already covered by previously considered
 ---
 
 #### Additional annotation
+
+![Additional annotation parameter input fields in the web application interface.](docs/images/input_fields_additional_annotation.png)
 
 ##### Min alignment bitscore
 
@@ -364,6 +376,8 @@ additional annotation as fragment of the overlapping preliminary match.
 
 #### Augmenting annotation
 
+![Augmenting annotation parameter input fields in the web application interface.](docs/images/input_fields_augmenting_annotation.png)
+
 ##### Min gap length
 
 * positive integer
@@ -400,6 +414,8 @@ for the interval to be annotated as match-complementary region.
 ---
 
 #### Property computation
+
+![Property computation parameter input fields in the web application interface.](docs/images/input_fields_property_computation.png)
 
 ##### Min coverage
 
@@ -444,6 +460,8 @@ be considered non-scrambled; else this property is not required.
 ---
 
 #### Output Parameters
+
+![Output parameters input fields in the web application interface.](docs/images/input_fields_output_parameters.png)
 
 ##### Min coverage
 
@@ -655,12 +673,6 @@ The algorithm returns:
          1. Add `H` to `Frag` with same index as `M`.
    3. Add `H` to `Hsp''`.
 3. `NoIdx <- Hsp'' \ (Add union Frag)`
-
-
-
-
-
-
 
 ## Output
 
