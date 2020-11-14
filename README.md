@@ -418,8 +418,8 @@ max(0, max(i1, i2) - min(j1, j2) - 1, max(k1, k2) - min(k1, k2) - 1)
 
 The ***shift*** between them is:
 ```Py
-max((i1 −i2)−(k1 −k2)􏰛, 􏰛(j1 −j2)−(l1 −l2)), if o1 = o2 = '+'
-max((i1 −i2)−(l2 −l1)􏰛, 􏰛(j1 −j2)−(k2 −k1)), if o1 = o2 = '-'
+max((i1 −i2)−(k1 −k2), (j1 −j2)−(l1 −l2)), if o1 = o2 = '+'
+max((i1 −i2)−(l2 −l1), (j1 −j2)−(k2 −k1)), if o1 = o2 = '-'
 undefined, if o1 != o2
 ```
 
