@@ -397,31 +397,81 @@ for the interval to be annotated as match-complementary region.
 
 ---
 
-#### Properties Parameters
-**Minimum Coverage of Product Sequence for Arrangement Property Computation** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the arrangement properties of the arrangement between the two sequences to be computed.
+#### Property computation
 
-**Maximum Tolerance for Overlapping Precursor Intervals during Arrangement Property Computation** - (nonnegative integer; **DEFAULT**: 5) The maximum intersection size of the precursor intervals of two matches in an arrangement to be considered disjoint. Note that whenever the precursor interval of one matche is completely contained in the precursor interval of another match in an arrangement, then the two matches are not considered disjoint, independent from the value for this parameter, or the size of the intersection.
+##### Min coverage
 
-**Maximum Number of Non Repeating and Non Overlapping Subarrangements for Arrangement Property Computation** - (positive integer; **DEFAULT**: 4) The maximum number of maximal subarrangements of an arrangement (maximal with the property of being nonrepeating and pairwise nonoverlapping) whose properties are considered in the arrangement property computation.
+* integer between 0 and 100
 
-**Complete** - (checkbox; **DEFAULT**: not checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must equal the set of indices of the overall arrangement, for the subarrangement to be considered nonscrambled; else, this property is not required.
+The minimum proportion of the region of a product sequence between its
+telomeres, if any, which must be covered by preliminary matches of a precursor
+sequence, for arrangement properties of the arrangement between the two
+sequences to be computed.
 
-**Consecutive** - (checkbox; **DEFAULT**: checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must form a consecutive set of integers, for the subarrangement to be considered nonscrambled; else, this proeprty is not required.
+##### Max overlap tolerance
 
-**Ordered** - (checkbox; **DEFAULT**: checked) If checked, the precursor intervals of the matches in a non repeating and non overlapping subarrangement of an arrangement, ordered by their starting coordinate, must occur in the same order, or complete reverse of the order the corresponding product intervals occur on the product sequence.
+* non-negative integer
+
+The maximum intersection size of the precursor intervals of two matches in an
+arrangement to still be considered disjoint. Note that two matches where one
+product interval is contained in another are never considered disjoint,
+regardless of the value of this parameter.
+
+##### Unambiguous subarrangement limit
+
+* positive integer
+
+The maximum number of unambiguous subarrangements of an arrangement whose
+properties are considered in the arrangement property computation.
+
+##### Complete
+
+If checked, an unambiguous subarrangement of an arrangement must be complete to
+be considered non-scrambled; else, this property is not required.
+
+##### Consecutive
+
+If checked, an unambiguous subarrangement of an arrangement must be consecutive
+to be considered non-scrambled; else, this property is not required.
+
+##### Ordered
+
+If checked, an unambiguous subarrangement of an arrangement must be ordered to
+be considered non-scrambled; else this property is not required.
 
 ---
 
 #### Output Parameters
-**Minimum Coverage of Product Sequence for Output** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the annotations resulting from the arrangement to be output.
 
-**Use SDRAP Aliases** - (checkbox; **DEFAULT**: not checked) If checked, SDRAP will output annotation with the DNA sequences labelled numerically in the order they were read into the program; else, SDRAP will use the primary identifiers listed in the input sequence files to refer to each sequence in its output.
+##### Min coverage
 
-**Output Gap Annotations on Product Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of gaps on the product sequences; else, it will not.
+* integer between 0 and 100
 
-**Output Fragment Annotations on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of fragments on the precursor sequences; else, it will not.
+The minimum proportion of the region of a product sequence between its
+telomeres, if any, which must be covered by preliminary matches of a precursor
+sequence, for the arrangement's annotations to be included in the output.
 
-**Give a Summary of the Outcome** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output a table containing a range of numbers which reflect some key values which summarize the outcome of the computation (see Output).
+##### Use SDRAP aliases
+
+If checked, SDRAP will output annotations with the DNA sequences labelled
+numerically in the order they were read into the program; else, SDRAP will use
+the primary identifiers listed in the input sequence files to refer to each
+sequence from its output.
+
+##### Output gaps
+
+If checked, SDRAP will output the annotations of gaps on the product sequences;
+else, it will not.
+
+##### Output fragments
+
+If checked, SDRAP will output the annotations of fragments on the precursor
+sequences; else, it will not.
+
+##### Output summary
+
+If checked, SDRAP will output a table containing a range of numbers which
+reflect some key statistics which summarize the outcome of the computation.
 
 ---
 
