@@ -393,11 +393,18 @@ coordinates of `+`-strand of the sequence.
 
 Given two alignments `M1 = ([i1, j1], [k1, l1], o1)` and `M2 = ([i2, j2], [c2,
 d2], o2)`, the ***distance*** between `M1` and `M2` is:
-```
+```Py
 max(0, max(i1, i2) - min(j1, j2) - 1, max(k1, k2) - min(k1, k2) - 1)
 ```
 
 ![Illustration of distance between two alignments.](docs/images/alignment_merging_distance.png)
+
+The shift between them is:
+```Py
+max􏰍􏰛(i1 −i2)−(k1 −k2)􏰛, 􏰛(j1 −j2)−(l1 −l2)􏰛􏰎, if o1 = o2 = '+'
+max􏰍􏰛(i1 −i2)−(l2 −l1)􏰛, 􏰛(j1 −j2)−(k2 −k1)􏰛􏰎, if o1 = o2 = '-'
+undefined, if o1 != o2
+```
 
 ![Illustration of shift of a pair of alignments.](docs/images/alignment_merging_shift.png)
 
