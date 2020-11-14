@@ -6,6 +6,33 @@ properties of the rearrangements reflecting their complexity. The annotated
 segments sought by the software are analogous to MDSs, IESs, and pointers in
 ciliate DNA rearrangements.
 
+* [Installation](#installation)
+  + [Prerequisites](#prerequisites)
+  + [Installation](#installation-1)
+* [Usage](#usage)
+  + [Input genome sequence files](#input-genome-sequence-files)
+  + [Required Parameters](#required-parameters)
+    - [MySQL database](#mysql-database)
+    - [Organism information](#organism-information)
+    - [Genome assemblies](#genome-assemblies)
+  + [Optional Parameters](#optional-parameters)
+    - [Telomere detection](#telomere-detection)
+    - [Alignment merging](#alignment-merging)
+    - [Preliminary annotation](#preliminary-annotation)
+    - [Additional annotation](#additional-annotation)
+    - [Augmenting annotation](#augmenting-annotation)
+    - [Property computation](#property-computation)
+    - [Output Parameters](#output-parameters)
+* [Algorithm](#algorithm)
+  + [Telomere detection algorithm](#telomere-detection-algorithm)
+  + [Alignment merging](#alignment-merging-1)
+  + [Preliminary annotation algorithm](#preliminary-annotation-algorithm)
+  + [Additional annotation algorithm](#additional-annotation-algorithm)
+* [Output](#output)
+  + [Sequence Files](#sequence-files)
+  + [Annotation Files](#annotation-files)
+  + [Data Files](#data-files)
+
 ## Installation
 
 ### Prerequisites
