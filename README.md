@@ -381,7 +381,6 @@ additional annotation as fragment of the overlapping preliminary match.
 ##### Min gap length
 
 * positive integer
-* `u` in algorithm description
 
 The minimum number of basepairs between two consecutive preliminary matches in
 the product for the region to be annotated as a gap.
@@ -393,7 +392,6 @@ If checked, pointers will be computed; else they will not be computed.
 ##### Min pointer length
 
 * positive integer
-* `v` in algorithm description
 
 The minimum intersection size of two consecutive preliminary matches in the
 product for the overlapping region in the product sequence and the corresponding
@@ -627,6 +625,8 @@ The algorithm returns:
 * Indices are assigned to each member of `Pre` indicating order of appearance of
   their corresponding product region compared to the others.
 
+---
+
 ### Additional annotation algorithm
 
 ![Flowchart and example for the additional annotation algorithm](docs/images/additional_annotation_algorithm.png)
@@ -674,46 +674,121 @@ The algorithm returns:
    3. Add `H` to `Hsp''`.
 3. `NoIdx <- Hsp'' \ (Add union Frag)`
 
+---
+
 ## Output
 
-When SDRAP runs on a dataset, the pipeline creates a subdirectory to the annotations directory and fills it with sequence files, annotations files and a few additional data files. The name of the subdirectory will be identical to the name of the MySQL database created by the pipeline (see Required Parameters, for how to specify the name of the database). In the following, we list and briefly describe all files which SDRAP outputs.
+When SDRAP runs on a dataset, the pipeline creates a subdirectory to its
+`annotations` directory and fills it with sequence files, annotations files and
+a few additional data files. The name of the subdirectory will be identical to
+the name of the MySQL database created by the pipeline (see the corresponding
+[required parameters](#mysql-database)). In this section, all files which SDRAP
+outputs into this subdirectory is briefly described. `<database_name>` refers to
+the name of the MySQL database (same as name of subdirectory).
 
-###### Sequence Files
+### Sequence Files
 
-**\<database-name\>_all_nucleotide.fasta** - Contains the nucleotide sequences of all precursor and all product sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters). Telomeres, if any, are masked as lower-case letters in the product sequences.
+#### `<database_name>_all_nucleotide.fasta`
 
-**\<database-name\>_prec_nucleotide.fasta** - Contains the nucleotide sequences of all precursor sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters).
+Contains the nucleotide sequences of all precursor and all product sequences.
+Sequences are identified either by their primary identifier (see [Required
+parameters](#genome-assemblies)), or by a numeric identifier assigned by SDRAP,
+if the *Use SDRAP aliases* checkbox is checked (see [Optional
+parameters](#output-parameters)). Telomeres, if any, are masked as lower-case
+letters in the product sequences.
 
-**\<database-name\>_prod_nucleotide.fasta** - Contains the nucleotide sequences of all product sequences. Sequences are identified either by their primary identifier (see Required Parameters), or by a numeric identifier assigned by SDRAP, if the *Use SDRAP Aliases* checkbox is checked (see Optional Parameters). Telomeres, if any, are masked as lower-case letters.
+#### `<database_name>_prec_nucleotide.fasta`
 
-###### Annotation Files
+Contains the nucleotide sequences of all precursor sequences. Sequences are
+identified either by their primary identifier (see [Required
+parameters](#genome-assemblies)), or by a numeric identifier assigned by SDRAP,
+if the *Use SDRAP aliases* checkbox is checked (see [Optional
+parameters](#output-parameters)).
 
-Note that all annotation files include annotations of high-scoring pairs, matches, fragments, eliminated sequences, pointers and gaps between a precursor and product sequence only when the region of the product sequence between the telomeres, if any, is covered by preliminary matches by at least a certain amount, as specified in the input parameters (see Optional parameters). All annotation files follow the BED file format.
+#### `<database_name>_prod_nucleotide.fasta`
 
-**\<database-name\>_prec_hsp.bed** - Contains the annotations of the precursor intervals of the high-scoring pairs on precursor sequences.
+Contains the nucleotide sequences of all product sequences. Sequences are
+identified either by their primary identifier (see [Required parameters](#genome-assemblies)),
+or by a numeric identifier assigned by SDRAP, if the *Use SDRAP aliases*
+checkbox is checked (see [Optional parameters](#output-parameters)). Telomeres,
+if any, are masked as lower-case letters.
 
-**\<database-name\>_prec_segments.bed** - Contains the annotations of the precursor intervals of the matches on precursor sequences.
+### Annotation Files
 
-**\<database-name\>_prec_pointers.bed** - Contains the annotations of the portions of the precursor intervals of preliminary matches which are considered pointers.
+Note that all annotation files include annotations of high-scoring pairs,
+matches, fragments, eliminated sequences, pointers and gaps between a precursor
+and product sequence only when the region of the product sequence between the
+telomeres, if any, is covered by preliminary matches by at least a certain
+amount, as specified in the input parameters (see [Optional
+parameters](#output-parameters)). All annotation files follow the BED file
+format.
 
-**\<database-name\>_prec_fragments.bed** - Contains the annotations of the precursor intervals of the fragments on precursor sequences.
+#### `<database_name>_prec_hsp.bed`
 
-**\<database-name\>_prec_eliminated_sequences.bed** - Contains the annotations of the intervals complementary to the precursor intervals of matches in precursor sequences.
+Contains the annotations of the precursor intervals of the BLAST high-scoring
+pairs on precursor sequences.
 
-**\<database-name\>_prod_hsp.bed** - Contains the annotations of the product intervals of the high-scoring pairs on product sequences.
+#### `<database_name>_prec_segments.bed`
 
-**\<database-name\>_prod_segments.bed** - Contains the annotations of the product intervals of the matches on product sequences.
+Contains the annotations of the precursor intervals of the matches on precursor
+sequences.
 
-**\<database-name\>_prod_pointers.bed** - Contains the annotations of the portions of the product intervals of preliminary matches which are considered pointers.
+#### `<database_name>_prec_pointers.bed`
 
-**\<database-name\>_gaps.bed** - Contains the annotations of the regions in the product sequences which are considered gaps.
+Contains the annotations of the portions of the precursor intervals of
+preliminary matches which are considered pointers.
 
-###### Data Files
+#### `<database_name>_prec_fragments.bed`
 
-**\<database-name\>_aliases.tsv** - A tab-delimited file containing the numeric identifier assigned to each sequence in the first column and the corresponding primary identifier specified in the input genome files in the second column.
+Contains the annotations of the precursor intervals of the fragments on
+precursor sequences.
 
-**\<database-name\>_parameters.tsv** - A tab-delimited file containing a descriptor of each parameter (except for the MySQL passwor used) in the first column and the value of the parameter used during pipeline execution in the second column.
+#### `<database_name>_prec_eliminated_sequences.bed`
 
-**\<database-name\>_properties.tsv** - A tab-delimited file with header containing pairs of precursor and product sequences and the properties identified for their arrangement, as described in the header. (1 = true, 0 = false)
+Contains the annotations of the intervals complementary to the precursor
+intervals of matches in precursor sequences.
 
-**\<database-name\>_summary.tsv** - A tab-delimited file with descriptions of numbers associated with the pipeline execution in the first column and the corresponding values in the second column.
+#### `<database_name>_prod_hsp.bed`
+
+Contains the annotations of the product intervals of the BLAST high-scoring
+pairs on product sequences.
+
+#### `<database_name>_prod_segments.bed`
+
+Contains the annotations of the product intervals of the matches on product
+sequences.
+
+#### `<database_name>_prod_pointers.bed`
+
+Contains the annotations of the portions of the product intervals of preliminary
+matches which are considered pointers.
+
+#### `<database_name>_gaps.bed`
+
+Contains the annotations of the regions in the product sequences which are
+considered gaps.
+
+### Data Files
+
+#### `<database_name>_aliases.tsv`
+
+A tab-delimited file containing the numeric identifier assigned to each sequence
+in the first column and the corresponding primary identifier specified in the
+input genome files in the second column.
+
+#### `<database_name>_parameters.tsv`
+
+A tab-delimited file containing a descriptor of each parameter (except for the
+MySQL password used) in the first column and the value of the parameter used
+during pipeline execution in the second column.
+
+#### `<database_name>_properties.tsv`
+
+A tab-delimited file with header containing pairs of precursor and product
+sequences and the properties identified for their arrangement, as described in
+the header. (1 = true, 0 = false)
+
+#### `<database_name>_summary.tsv`
+
+A tab-delimited file with descriptions of numbers associated with the pipeline
+execution in the first column and the corresponding values in the second column.
