@@ -72,7 +72,7 @@ precursor and product sequence files.
 
 ### Required Parameters
 
-#### MySQL Database
+#### MySQL database
 
 ##### Hostname
 
@@ -120,7 +120,7 @@ SDRAP will connect to the MySQL server using the PHP command:
 mysqli_connect(<hostname>, <username>, <password>);
 ```
 
-##### Database Name
+##### Database name
 
 Tthe name SDRAP should give the MySQL database which will be generated. The
 MySQL *Username* given above should have all privileges on this database, as
@@ -128,7 +128,7 @@ explained in the *Username* parameter description above.
 
 ---
 
-#### Organism Information
+#### Organism information
 
 While these parameters are listed as required parameters, they can be left blank
 because they do not affect the computation. However, I highly recommend
@@ -149,21 +149,22 @@ Strain).
 
 The name of the strain of the organism (intraspecific taxonomic rank).
 
-##### Taxonomy ID
+##### Taxonomy id
 
-The Taxonomy ID of the organism (taxon identifier in NCBI Taxonomy Database).
+The Taxonomy identifier of the organism (taxon identifier in NCBI Taxonomy
+Database).
 
 ---
 
-#### Genome Assemblies
+#### Genome assemblies
 
-##### Precursor Genome
+##### Precursor genome
 
 Precursor sequence file of the organism. See Genome Sequence Files above for
 more information on how to add files to the list of choices, how to remove them,
 and the necessary format of the files.
 
-##### Precursor Sequence Description Delimiter
+##### Precursor sequence description delimiter
 
 Delimiter for the selected precursor sequence file. SDRAP will break the
 description line of each nucleotide sequence in the file into fields based on
@@ -172,13 +173,13 @@ to the sequence. Please be sure to include a unique identifier as the first
 field in the description line of each nucleotide sequence across both the
 precursor and product sequence files.
 
-##### Product Genome
+##### Product genome
 
 Product sequence file of the organism. See [Input genome sequence files](#input-genome-sequence-files)
 for more information on how to add files to the list of choices, how to remove
 them, and the necessary format of the files.
 
-##### Product Sequence Description Delimiter
+##### Product sequence description delimiter
 
 Delimiter for the selected product sequence file. SDRAP will break the
 description line of each nucleotide sequence in the file into fields based on
@@ -187,7 +188,7 @@ to the sequence. Please be sure to include a unique identifier as the first
 field in the description line of each nucleotide sequence across both the
 precursor and product sequence files.
 
-##### Telomere Pattern
+##### Telomere motif
 
 * String over the alphabet {`A`, `C`, `G`, `T`}
 * `P` in [telomere detection algorithm](#telomere-detection-algorithm)
@@ -201,11 +202,11 @@ Pattern* parameter should be specified as TTAGGG.
 
 ### Optional Parameters
 
-#### Telomere Annotation Parameters
+#### Telomere detection
 
 ![Telomere annotation parameters input fields in the web application interface.](docs/images/telomere_annotation_parameters.png)
 
-##### Relative Error Limit
+##### Max relative error
 
 * Real number between 0 and 1
 * `e` in algorithm description
@@ -217,7 +218,7 @@ enforces higher sequence similarity, both locally within the annotated telomere
 and for the entire telomere. Setting the value of this parameter to 0,
 effectively enforces a percent identity of 100 to a flawless telomeric sequence.
 
-##### Cumulative Error Limit
+##### Max cumulative error
 
 * non-negative integer
 * `h` in algorithm description
@@ -231,7 +232,7 @@ permits fewer flaws close together without being "balanced out" by basepairs
 conforming to the ideal telomere. Setting the value of this parameter to 0,
 effectively enforces a percent identity of 100 to a flawless telomeric sequence.
 
-##### Maximum Length
+##### Max length
 
 * positive integer
 * `l` in algorithm description
@@ -242,7 +243,7 @@ where the cumulative error (`H`) was 0. If the value of this parameter is set to
 an integer less than the length of the parameter *Telomere Pattern*, the
 algorithm will never return a telomere.
 
-##### Maximum Distance to Sequence End
+##### Max offset
 
 * non-negative integer
 * `o` in algorithm description
@@ -252,7 +253,7 @@ Setting the value of this parameter to 0 will forbid the presence of
 nontelomeric portions at those ends of the sequence where telomeres were found
 and lead to the exclusion of any such telomeres from the telomere annotation.
 
-##### Minimum Length
+##### Min length
 
 * non-negative integer
 * `m` in algorithm description
@@ -263,9 +264,45 @@ length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
 ---
 
-#### Arrangement Annotation Parameters
+#### Preliminary annotation
 
-##### Tolerance for Discrepancies Between Relative Positions of Precursor and Product Intervals for HSP Merging
+##### Min alignment length
+
+* positive integer
+* `l` in algorithm description
+
+The value of this parameter determines the minimum length an alignment must have
+to be considered for preliminary annotation.
+
+##### Min alignment bitscore
+
+* non-negative integer
+* `b` in algorithm description
+
+The value of this parameter determines the minimum bitscore an alignment must have to be considered for preliminary annotation.
+
+##### Min alignment percent identity
+
+* real number between 0 and 100
+* `q` in algorithm description
+
+The value of this parameter determines the minimum percent identity an alignment
+must have to be considered for preliminary annotation.
+
+##### Min alignment coverage contribution
+
+* non-negative integer
+* `c` in algorithm description
+
+The value of this parameter determines the number of base pairs an alignment
+must cover, and which are not already covered by previously considered
+(possibly merged) alignments, to be considered for preliminary annotation.
+
+---
+
+#### Alignment merging
+
+##### Max shift
 
 * non-negative integer
 * `t` in algorithm description
@@ -274,38 +311,77 @@ The value of this parameter determines the maximum discrepancy between the
 relative positions of the corresponding end points of the precursor and product
 regions of two alignments, for them to be considered for merging.
 
-##### Maximum Gap Length for HSP Merging
+##### Max distance
 
 * non-negative integer
-* `d` in algorithm description below
+* `d` in algorithm description
 
 The maximum number of basepairs between the precursor intervals and between the
 product intervals (separately) allowed for two matches corresponding to these
 intervals to be considered for merging.
 
-**Minimum HSP Length for Match Annotation** - (positive integer; **DEFAULT**: 18; *l* in algorithmic description below) The value of this parameter determines the minimum length a high-scoring pair provided by BLAST must have to be considered for match annotation.
+---
 
-**Minimum Bitscore for Preliminary Match Annotation** - (nonnegative integer; **DEFAULT**: 49; *b* in algorithmic description below) The value of this parameter determines the minimum bitscore a high-scoring pair provided by BLAST must have to be considered for preliminary match annotation.
+#### Gaps and pointers
 
-**Minimum Percent Identity for Preliminary Match Annotation** - (decimal number between 0 and 100; **DEFAULT**: 99.00; *q* in algorithmic description below) The value of this parameter determines the minimum percent identity a high-scoring pair provided by BLAST must have to be considered for preliminary match annotation.
+##### Min gap length
 
-**Minimum Additional Base Pair Coverage to Qualify for Preliminary Match Annotation** - (nonnegative integer; **DEFAULT**: 4; *c* in algorithmic description below) The value of this parameter determines the number of base pairs a high-scoring pair provided by BLAST must cover, and which are not already covered by previously considered high-scoring pairs, or merged high-scoring pairs, to be considered for preliminary match annotation.
+* positive integer
+* `u` in algorithm description
 
+The minimum number of basepairs between two consecutive preliminary matches in
+the product for the region to be annotated as a gap.
 
+##### Compute pointers
 
-**Minimum Base Pair Length for Gap Annotation** - (positive integer; **DEFAULT**: 4; *u* in algorithmic description below) The minimum number of basepairs between two consecutive product intervals of preliminary matches for the region to be annotated as a gap.
+If checked, pointers will be computed; else they will not be computed.
 
-**Compute Pointer Annotations on Precursor and Product Sequences** - (checkbox; **DEFAULT**: checked) if checked, pointers will be computed; else they will not be computed.
+##### Min pointer length
 
-**Minimum Base Pair Length for Pointer Annotation** - (positive integer; **DEFAULT**: 3; *v* in algorithmic description below) The minimum number of basepairs two consecutive product intervals of preliminary matches must overlap with for the overlapping region in the product sequence and the corresponding two regions in the precursor sequence to be annotated as a pointers.
+* positive integer
+* `v` in algorithm description
 
-**Minimum Bitscore for Additional Match Annotation** - (nonnegative integer; **DEFAULT**: 49; *b'* in algorithmic description below) The minimum bitscore a high-scoring pair provided by BLAST must have to be considered for additional match annotation.
+The minimum intersection size of two consecutive preliminary matches in the
+product for the overlapping region in the product sequence and the corresponding
+two regions in the precursor sequence to be annotated as pointers.
 
-**Minimum Percent Identity for Additional Match Annotation** - (decimal number between 0 and 100; **DEFAULT**: 80.00; *q'* in algorithmic description below) The minimum percent identity a high-scoring pair provided by BLAST must have to be considered for additional match annotation.
+---
 
-**Minimum Coverage of Product Interval for Additional Match Annotation** - (decimal number between 0 and 1; **DEFAULT**: 0.8; *r* in algorithmic description below) The minimum proportion of the product interval of a preliminary match covered by the product interval of a high-scoring pair provided by BLAST to be considered for annotation as additional match inheriting the index of the overlapping preliminary match.
+#### Additional annotation
 
-**Minimum Coverage of Product Interval for Fragment Annotation** - (decimal number between 0 and 1; **DEFAULT**: 0.2; *s* in algorithmic description below) The minimum proportion of the product interval of a preliminary match covered by the product interval of a high-scoring pair provided by BLAST to be considered for annotation as fragment inheriting the index of the overlapping preliminary match.
+##### Min alignment bitscore
+
+* non-negative integer
+* `b'` in algorithm description
+
+The minimum bitscore an alignment must have to be considered for additional
+annotation.
+
+##### Min alignment percent identity
+
+* real number between 0 and 100
+* `q'` in algorithm description
+
+The minimum percent identity an alignment must have to be considered for
+additional annotation.
+
+##### Min product interval coverage for matches
+
+* real number between 0 and 1
+* `r` in algorithm description
+
+The minimum coverage of the product interval of a preliminary match by the
+product interval of an (possibly merged) alignment to be considered for
+additional annotation as match which is treated like a repeat of the overlapping
+preliminary match.
+
+##### Min product interval coverage for fragments
+
+* real number between 0 and 1
+* `s` in algorithm description
+
+The minimum coverage of the product interval of a preliminary match by the
+product interval of an (possibly merged) alignment to be considered for additional annotation as fragment of the overlapping preliminary match.
 
 ---
 
