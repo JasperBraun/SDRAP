@@ -399,6 +399,8 @@ max(0, max(i1, i2) - min(j1, j2) - 1, max(k1, k2) - min(k1, k2) - 1)
 
 ![Illustration of distance between two alignments.](docs/images/alignment_merging_distance.png)
 
+![Illustration of shift of a pair of alignments.](docs/images/alignment_merging_shift.png)
+
 ---
 
 
