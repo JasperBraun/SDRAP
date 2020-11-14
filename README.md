@@ -301,7 +301,8 @@ to be considered for preliminary annotation.
 * non-negative integer
 * `b` in algorithm description
 
-The value of this parameter determines the minimum bitscore an alignment must have to be considered for preliminary annotation.
+The value of this parameter determines the minimum bitscore an alignment must
+have to be considered for preliminary annotation.
 
 ##### Min alignment percent identity
 
@@ -353,10 +354,11 @@ preliminary match.
 ##### Min product interval coverage for fragments
 
 * real number between 0 and 1
-* `s` in algorithm description
+* `r'` in algorithm description
 
 The minimum coverage of the product interval of a preliminary match by the
-product interval of an (possibly merged) alignment to be considered for additional annotation as fragment of the overlapping preliminary match.
+product interval of an (possibly merged) alignment to be considered for
+additional annotation as fragment of the overlapping preliminary match.
 
 ---
 
@@ -480,17 +482,17 @@ reflect some key statistics which summarize the outcome of the computation.
 ### Telomere detection algorithm
 
 The variables `P`, `o`, `l`, `e`, `h`, and `m` referenced here refer to the
-corresponding [required](#required-parameters) and [optional](#optional-parameters)
+corresponding [required](#telomere-motif) and [optional](#telomere-detection)
 parameters.
 
 The algorithm takes as input:
 * `S` - Product sequence (string over alphabet {`A`, `C`, `G`, `T`})
-* `P` - Telomere pattern (string over alphabet {`A`, `C`, `G`, `T`})
-* `e` - Relative error limit (real number between 0 and 1)
-* `h` - Cumulative error limit (non-negative integer)
-* `l` - Maximum length (positive integer)
-* `o` - Maximum distance to sequence end (non-negative integer)
-* `m` - Minimum length (non-negative integer)
+* `P` - Telomere motif (string over alphabet {`A`, `C`, `G`, `T`})
+* `e` - Max relative error (real number between 0 and 1)
+* `h` - Max cumulative error (non-negative integer)
+* `l` - Max length (positive integer)
+* `o` - Max offset (non-negative integer)
+* `m` - Min length (non-negative integer)
 
 The algorithm returns:
 * `false` if no telomere was detected
@@ -498,7 +500,7 @@ The algorithm returns:
 
 1. Find first occurrence of a cyclic permutation `P'` of `P` at most `o` base
    pairs from the 5' end of `S` and set `E <- P'` (return `false` if none was
-   found)
+   found).
 2. Create a flawless telomeric sequence `F` for comparison (`F` is the sequence
    obtained by concatenating `P` with itself ceiling of `(l + o) / |P|` times
    and then cyclically permuting it in such a way that the cyclic permutation
@@ -529,10 +531,11 @@ Sequence alignments are obtained using BLAST with the `-ungapped` flag to avoid
 falsely combining alignments that reflect sequences of unscrambled MDSs to
 single large gapped alignments. To avoid falsely leaving sets of alignments
 which reflect a single MDS fragmented, some of these ungapped sequence
-alignments are merged during the [Arrangement annotation step](#arrangement-annotation-algorithm).
-In this section, the criterion for two alignments to be merged is discussed. The
+alignments are merged during the [Preliminary annotation step](#preliminary-annotation-algorithm)
+and the [Additional annotation step](#additional-annotation-algorithm). In this
+section, the criterion for two alignments to be merged is discussed. The
 variables `t`, and `d` referenced here refer to the correponding [optional
-parameters](#optional-parameters).
+parameters](#alignment-merging).
 
 Here, we neglect the actual sequences of sequence alignments and model sequence
 alignments as triples `([i,j], [k,l], o)` where `[i,j]` and `[k,l]` are integer
@@ -567,62 +570,91 @@ For two non-negative integers `t` and `d`, `M1` and `M2` are
 
 ---
 
+### Preliminary annotation algorithm
 
+![Flowchart and example for the preliminary annotation algorithm](docs/images/preliminary_annotation_algorithm.png)
 
-### Arrangement annotation algorithm
+The variables `k`, `b`, `q`, `c` referenced here refer to the corresponding
+[optional parameters](#preliminary-annotation). `t` and `d` are the [merging
+parameter values](#alignment-merging).
 
-The variables `l`, *t*, *g*, *b*, *q*, *b'*, *q'*, *c*, *u*, *v*, *b'*, *q'*, *r* and *s* referenced in the description of the corresponding parameters above). The algorithmic description is preceded with two definitions and broken into 3 steps.
+The algorithm takes as input:
+* `Hsp` - Collection of ungapped alignments returned by BLAST with length,
+          bitscore and percent identity at least `k`, `b`, and `q`,
+          respectively, between a precursor (BLAST subject) and product (BLAST
+          query) sequence.
+* `c` - Min alignment coverage contribution (non-negative integer)
 
-To represent regions of high similarity, we define a *match* of a product sequence on a precursor sequence to be a triple ([*a*, *b*], [*c*, *d*], *o*), where [*a*, *b*] is an integer interval indicating a region in the precursor sequence, [*c*, *d*] is an integer interval indicating a region in the product sequence and *o* is either 0, or 1 indicating the relative orientation of the two regions (*o*=1 means the two regions have the same orientation and *o*=0 means the two regions are oppositely oriented). A high-scoring pair, which is returned by BLAST can be viewed as a *match* in the obvious way.
+The algorithm returns:
+* A collection `Pre` containing alignments from `Hsp` or alignments obtained by
+  merging members of `Hsp`, where no aligned product region contains another.
 
-For two nonnegative integers *t* and *g*, we consider two matches ([*a1*, *b1*], [*c1*, *d1*], *o1*), and ([*a2*, *b2*], [*c2*, *d2*], *o2*) between the same precursor and product sequence to be *(t, g)-mergeable*, if the regions on the precursor sequence and the product sequence are at most *g* base pairs apart and one of following conditions is satisfied:
-1. *o1*=*o2*=1 and |(*a1*-*a2*)-(*c1*-*c2*)|,|(*b1*-*b2*)-(*d1*-*d2*)| do not exceed *t*, or
-2. *o1*=*o2*=0 and |(*a1*-*a2*)-(*d2*-*d1*)|,|(*b1*-*b2*)-(*c2*-*c1*)| do not exceed *t*.
-Informally, two matches are *(t, g)-mergeable* if they are "roughly adjacent" at the same ends in the precursor and product, where the meaning of "roughly adjacent" depends on the values of the parameters *t* and *g*.
+1. Set `Pre <- {}` and sort `Hsp` by bitscore (descending).
+2. For each `H` in `Hsp`:
+   1. If `H` covers at least `c` basepairs, which aren't already covered by
+      members of `Pre`:
+      1. For each `M` in `Pre`:
+         1. If (`H`, `M`) are (`t`, `d`)-mergeable:
+            1. Merge `M` into `H`.
+            2. Remove `M` from `Pre`.
+      2. For each `M` in `Pre`:
+         1. `Pre' <- (Pre \ {M}) union {H}`
+         2. If `M` covers less than `c` basepairs, which aren't covered by
+            members of `Pre'`:
+            1. Remove `M` from `Pre`
+      3. Add `H` to `Pre`.
 
-In the first part of the algorithm (applied to each pair of precursor and product sequences), a preliminary set of matches is extracted from the set of high-scoring pairs between a precursor and a product sequence provided by BLAST, but the algorithm enforces that the product region of no match in the set contains the product region of another:
-```
-  1. Given a precursor and a product sequence, let *H* be the set of all high-scoring pairs between the two sequences of length at least *l*, and with bitscore and percent identity at least *b* and *q*, respectively, ordered by bitscore and percent identity in descending order.
-  2. Initialize empty set *A*.
-  2. One high-scoring pair from *H* at a time, do
-  3.  | check the size of the intersection of the product interval of the high-scoring pair with the complement of the product intervals of the members of *A* in the product sequence. If that number is less than *c*, skip remainder of loop body and continue with next member of *H*.
-  4.  | check if high-scoring pair can be merged with any member of *A*, or if the product intervals of members of *A* intersect the complement of the high-scoring pair's complement in the product sequence by less than *c*. In the first case, update the high-scoring pair to reflect the new merged match and remove the merged member from *A*; in the latter case, simply remove the respective member of *A*.
-  5.  | add high-scoring pair to *A*.
-  6. done
-  7. return *A* - the set of all preliminary matches between the two sequences.
-```
-Note that at the end of this algorithm, the product interval of no member of *A* contains the product interval of another.
+* This algorithm only considers alignments, or portions of alignments that align
+  regions of product sequences between telomeres, if any.
+* Indices are assigned to each member of `Pre` indicating order of appearance of
+  their corresponding product region compared to the others.
 
-In the second part, the preliminary matches in *A* are indexed according to the order in which their corresponding product regions are encountered when reading the product sequence from the 5' to the 3' end. Furthermore, pointers and gaps are annotated in this part:
-```
-  1. Sort *A* according to the starting coordinate of their product intervals on the product sequence in ascending order.
-  2. Scan through *A* in the sorted order assign indices according to the matches' positions. While doing so check if the product intervals of consecutive matches are at least *u* basepairs apart, or overlap by at least *v* basepairs; whenever the first is true, annotate the region between the respective product intervals on the product sequence as a gap and whenever the latter is true annotate the overlapping region and the corresponding regions in the precursor sequence as pointers.
-```
+### Additional annotation algorithm
 
-In the third and last part, additional matches are extracted from the high-scoring pairs between the two sequences. These additional matches are artifically assigned the index of the preliminary match whose product region overlaps with their product region sufficiently (as defined below). Fragments of matches are annotated in this step, as well:
-```
-  1. Let *H'* be the set of all high-scoring pairs between the two sequences which did not became (part of) preliminary matches in the first part and which are of length at least *l*, and have bitscore and percent identity at least *b'* and *q'*, respectively.
-  2. Initialize empty sets *A'*.
-  3. One high-scoring pair from *H'* at a time, do
-  4.  | Check if any members of *A'* can be merged with high-scoring pairs; whenever that is the case, update high-scoring pair to reflect the new merged match and remove the respective member of *A'*.
-  5.  | One preliminary match from *A* at a time, do
-  6.  |  | Let *N* be the size of the product interval of the preliminary match
-  7.  |  | Let *D* be the size of the intersection of the product intervals of the high-scoring pair and the preliminary match
-  8.  |  | If *D* >= r\**N*, then
-  9.  |  |  | add a copy of the high-scoring pair to *A'* as an additional match with index inherited from preliminary match
- 10.  |  | else if *D* >= s\**N*, then
- 11.  |  |  | add a copy of the high-scoring pair to *A'* as a fragment with index inherited from preliminary match
- 12.  |  | fi
- 13.  | done
- 14.  | If no copy of the high-scoring pair was added to *A'*, then
- 15.  |  | add a copy of the high-scoring pair to *A'* as a fragment with no index
- 16.  | fi
- 17. done
- 18. return *A'* - the set of all additional matches and fragments between the two sequences.
-```
+![Flowchart and example for the additional annotation algorithm](docs/images/additional_annotation_algorithm.png)
 
+The variables `b'`, `q'`, `r`, `r'` referenced here refer to the corresponding
+[optional parameters](#additional-annotation). `t` and `d` are the [merging
+parameter values](#alignment-merging).
 
+The algorithm takes as input:
+* `Hsp` - Collection of ungapped alignments returned by BLAST with bitscore and
+          percent identity at least `b'`, and `q'`, respectively, between a pre-
+          cursor (BLAST subject) and product (BLAST query) sequence.
+* `Pre` - Preliminary arrangement obtained in [preliminary annotation step](#preliminary-annotation-algorithm)
+* `r` - Min product interval coverage for matches (real number between 0 and 1)
+* `r'` - Min product interval coverage for fragments (real number between 0 and 1)
 
+The algorithm returns:
+* A collection `Add` containing alignments from `Hsp \ Pre` or alignments
+  obtained by merging members of `Hsp \ Pre`. For each such alignment `A` and
+  each member `M` of `Pre` whose aligned product region is intersected by that
+  of `A` by at least `r • |Prod(M)|`, exactly one copy of `A` is present in
+  `Add` with the index of `M` assigned to it.
+* A collection `Frag` containing alignments from `Hsp \ Pre` or alignments
+  obtained by merging members of `Hsp \ Pre`. For each such alignment `A` and
+  each member `M` of `Pre` whose aligned product region is intersected by that
+  of `A` by at least `r' • |Prod(M)|` and less than `r • |Prod(M)|`, exactly one
+  copy of `A` is present in `Frag` with the index of `M` assigned to it.
+* A collection `NoIdx` containing alignments from `Hsp \ Pre` or alignments
+  obtained by merging members of `Hsp \ Pre`, where no member `M` of `Pre`
+  intersects its aligned product region by `r' • |Prod(M)|`, or more.
+
+1. Set `Add <- {}`, set `Hsp'' <- {}`, and set `Hsp' <- Hsp \ Pre`, where each
+   alignment in `Hsp` which was merged to form an alignment in `Pre` is removed
+   from `Hsp'`, as well.
+2. For each `H` in `Hsp'`:
+   1. For each `M` in `Hsp''`:
+      1. If (`H`, `M`) are (`t`, `d`)-mergeable:
+         1. Merge `M` into `H`.
+         2. Remove `M` from `Hsp''` and `Add`.
+   2. For each `M` in `Pre`:
+      1. If intersection size of product regions of `H` and `M` is at least `r`:
+         1. Add `H` to `Add` with same index as `M`.
+      2. else if intersection size is at least `r'`:
+         1. Add `H` to `Frag` with same index as `M`.
+   3. Add `H` to `Hsp''`.
+3. `NoIdx <- Hsp'' \ (Add union Frag)`
 
 
 
