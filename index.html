@@ -517,12 +517,12 @@
           </div>
         </div>
 
-        <!-- Gaps and pointers -->
+        <!-- Augmenting annotation -->
         <div class="panel panel-default">
-          <div class="panel-heading">Gaps and pointers
-            <button type="button" data-toggle="collapse" data-target="#gapPointerParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
+          <div class="panel-heading">Augmenting annotation
+            <button type="button" data-toggle="collapse" data-target="#augmentingAnnotation" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
           </div>
-          <div id=gapPointerParameters class="panel-body collapse">
+          <div id=augmentingAnnotation class="panel-body collapse">
 
             <!-- GAP_MIN_LENGTH -->
             <div id="min_gap" class="form-group form-group-sm has-feedback">
@@ -565,6 +565,35 @@
                        value="3">
                 <span id="min_ptr_len-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
                 <span id="minimum-pointerLength-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- GIVE_PREC_SEGMENT_COMPLEMENT -->
+            <div id="complement" class="form-group form-group-sm has-feedback">
+              <label for="give-complement" class="col-sm-9 control-label">Compute match-complementary regions</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="give-complement" 
+                       aria-describedby="give-complement-error-status"
+                       checked>
+                <span id="complement-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="give-complement-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- COMPLEMENT_INTERVAL_MIN_LENGTH -->
+            <div id="min_complement" class="form-group form-group-sm has-feedback">
+              <label for="minimum-complement" class="col-sm-9 control-label">Min match-complementary region length</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="minimum-complement" 
+                       placeholder="4"
+                       aria-describedby="minimum-complement-error-status" 
+                       value="4">
+                <span id="min_complement-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="minimum-complement-error-status" class="sr-only">(error)</span>                       
               </div>
             </div>
 
@@ -727,35 +756,6 @@
                        checked>
                 <span id="fragments-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
                 <span id="output-fragments-error-status" class="sr-only">(error)</span>
-              </div>
-            </div>
-
-            <!-- GIVE_PREC_SEGMENT_COMPLEMENT -->
-            <div id="complement" class="form-group form-group-sm has-feedback">
-              <label for="give-complement" class="col-sm-9 control-label">Annotate match-complementary regions</label>
-              <div class="col-sm-3">
-                <input class="form-control" 
-                       type="checkbox" 
-                       id="give-complement" 
-                       aria-describedby="give-complement-error-status"
-                       checked>
-                <span id="complement-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
-                <span id="give-complement-error-status" class="sr-only">(error)</span>
-              </div>
-            </div>
-
-            <!-- COMPLEMENT_INTERVAL_MIN_LENGTH -->
-            <div id="min_complement" class="form-group form-group-sm has-feedback">
-              <label for="minimum-complement" class="col-sm-9 control-label">Min match-complementary region length</label>
-              <div class="col-sm-3">
-                <input class="form-control" 
-                       type="text" 
-                       id="minimum-complement" 
-                       placeholder="4"
-                       aria-describedby="minimum-complement-error-status" 
-                       value="4">
-                <span id="min_complement-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
-                <span id="minimum-complement-error-status" class="sr-only">(error)</span>                       
               </div>
             </div>
 

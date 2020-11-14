@@ -264,6 +264,28 @@ length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
 ---
 
+#### Alignment merging
+
+##### Max shift
+
+* non-negative integer
+* `t` in algorithm description
+
+The value of this parameter determines the maximum discrepancy between the
+relative positions of the corresponding end points of the precursor and product
+regions of two alignments, for them to be considered for merging.
+
+##### Max distance
+
+* non-negative integer
+* `d` in algorithm description
+
+The maximum number of basepairs between the precursor intervals and between the
+product intervals (separately) allowed for two matches corresponding to these
+intervals to be considered for merging.
+
+---
+
 #### Preliminary annotation
 
 ##### Min alignment length
@@ -297,53 +319,6 @@ must have to be considered for preliminary annotation.
 The value of this parameter determines the number of base pairs an alignment
 must cover, and which are not already covered by previously considered
 (possibly merged) alignments, to be considered for preliminary annotation.
-
----
-
-#### Alignment merging
-
-##### Max shift
-
-* non-negative integer
-* `t` in algorithm description
-
-The value of this parameter determines the maximum discrepancy between the
-relative positions of the corresponding end points of the precursor and product
-regions of two alignments, for them to be considered for merging.
-
-##### Max distance
-
-* non-negative integer
-* `d` in algorithm description
-
-The maximum number of basepairs between the precursor intervals and between the
-product intervals (separately) allowed for two matches corresponding to these
-intervals to be considered for merging.
-
----
-
-#### Gaps and pointers
-
-##### Min gap length
-
-* positive integer
-* `u` in algorithm description
-
-The minimum number of basepairs between two consecutive preliminary matches in
-the product for the region to be annotated as a gap.
-
-##### Compute pointers
-
-If checked, pointers will be computed; else they will not be computed.
-
-##### Min pointer length
-
-* positive integer
-* `v` in algorithm description
-
-The minimum intersection size of two consecutive preliminary matches in the
-product for the overlapping region in the product sequence and the corresponding
-two regions in the precursor sequence to be annotated as pointers.
 
 ---
 
@@ -385,6 +360,43 @@ product interval of an (possibly merged) alignment to be considered for addition
 
 ---
 
+#### Augmenting annotation
+
+##### Min gap length
+
+* positive integer
+* `u` in algorithm description
+
+The minimum number of basepairs between two consecutive preliminary matches in
+the product for the region to be annotated as a gap.
+
+##### Compute pointers
+
+If checked, pointers will be computed; else they will not be computed.
+
+##### Min pointer length
+
+* positive integer
+* `v` in algorithm description
+
+The minimum intersection size of two consecutive preliminary matches in the
+product for the overlapping region in the product sequence and the corresponding
+two regions in the precursor sequence to be annotated as pointers.
+
+##### Compute match-complementary regions
+
+If checked, SDRAP will output the annotations of intervals complementary to the
+precursor intervals of matches on the precursor sequences; else, it will not.
+
+##### Min match-complementary region length
+
+* positive integer
+
+The minimum number of basepairs between two consecutive matches in the precursor
+for the interval to be annotated as match-complementary region.
+
+---
+
 #### Properties Parameters
 **Minimum Coverage of Product Sequence for Arrangement Property Computation** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the arrangement properties of the arrangement between the two sequences to be computed.
 
@@ -408,10 +420,6 @@ product interval of an (possibly merged) alignment to be considered for addition
 **Output Gap Annotations on Product Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of gaps on the product sequences; else, it will not.
 
 **Output Fragment Annotations on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of fragments on the precursor sequences; else, it will not.
-
-**Give Complementary Intervals to Precursor Intervals of Matches on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of intervals complementary to the precursor intervals of matches on the precursor sequences; else, it will not.
-
-**Minimum Length of Complementary Intervals** - (positive integer; **DEFAULT**: 4) minimum size of an interval in the complement the precursor intervals of the matches of an arrangement in a precursor sequence; for the interval to be included in the output.
 
 **Give a Summary of the Outcome** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output a table containing a range of numbers which reflect some key values which summarize the outcome of the computation (see Output).
 
