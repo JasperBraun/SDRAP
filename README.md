@@ -1,5 +1,11 @@
 # SDRAP - Scrambled DNA Rearrangement Annotation Pipeline
 
+SDRAP is a web application which annotates DNA segments in DNA rearrangement
+precursor and product genomes which describe the rearrangement, and computes
+properties of the rearrangements reflecting their complexity. The annotated
+segments sought by the software are analogous to MDSs, IESs, and pointers in
+ciliate DNA rearrangements.
+
 ## Installation
 
 ### Prerequisites
@@ -62,23 +68,27 @@ sequence. Therefore, please be sure to include a unique identifier as the first
 field in the description line of each nucleotide sequence across both the
 precursor and product sequence files.
 
+---
+
 ### Required Parameters
 
 #### MySQL Database
 
-**Hostname** - the host name, or IP address identifying the MySQL server which
-SDRAP should use. If using the MySQL server of the machine where SDRAP is
-located, leave this field as 'localhost'.
+##### Hostname
 
-**Username** - the MySQL username that SDDRAP should use.
+The host name, or IP address identifying the MySQL server which SDRAP should
+use. If using the MySQL server of the machine where SDRAP is located, leave this
+field as 'localhost'.
 
-This user should have all privileges on the database with name specified below.
-We discourage the user to use a the MySQL root user or create a user with all
-privileges on all databases. Instead, we encourage creation of a new MySQL user
-solely for SDRAP. This can be done as follows:
+##### Username
 
-1. Log into the MySQL server with a user that has sufficient privileges to create
-   users and grant privileges.
+The MySQL username that SDRAP should use. This user should have all privileges
+on the database with name specified below. It is inadvisable to use a the MySQL
+root user or to create a user with all privileges on all databases. Instead, a
+new MySQL user solely for SDRAP should be created This can be done as follows:
+
+1. Log into the MySQL server with a user that has sufficient privileges to
+   create users and grant privileges.
 2. Execute in MySQL with sufficient permissions:
 ```sql
 CREATE USER '<username>'@'localhost'
@@ -101,16 +111,22 @@ database name SDRAP should use, make sure it has the specified prefix. For
 security purposes, you should ensure that only the databases created by SDRAP on
 the MySQL server will have the specified prefix.
 
-**Password** - the password of the MySQL user specified in the previous field.
+##### Password
+
+The password of the MySQL user specified in the previous field.
 
 SDRAP will connect to the MySQL server using the PHP command:
 ```php
 mysqli_connect(<hostname>, <username>, <password>);
 ```
 
-**Database Name** - the name SDRAP should give the MySQL database which will be
-generated. The MySQL *Username* given above should have all privileges on this
-database, as explained in the *Username* parameter description above.
+##### Database Name
+
+Tthe name SDRAP should give the MySQL database which will be generated. The
+MySQL *Username* given above should have all privileges on this database, as
+explained in the *Username* parameter description above.
+
+---
 
 #### Organism Information
 
@@ -119,47 +135,69 @@ because they do not affect the computation. However, I highly recommend
 specifying the values of these parameters to be able to reference which organism
 the data refers to.
 
-**Genus** - the name of the genus of the organism (taxonomic rank below family
-and above species)
+##### Genus
 
-**Species** - the name of the species of the organism (taxonomic rank below
-genus and above Strain)
+The name of the genus of the organism (taxonomic rank below family and above
+species).
 
-**Strain** - the name of the strain of the organism (intraspecific taxonomic
-rank)
+##### Species
 
-**Taxonomy ID** - the Taxonomy ID of the organism (taxon identifier in NCBI
-Taxonomy Database)
+The name of the species of the organism (taxonomic rank below genus and above
+Strain).
+
+##### Strain
+
+The name of the strain of the organism (intraspecific taxonomic rank).
+
+##### Taxonomy ID
+
+The Taxonomy ID of the organism (taxon identifier in NCBI Taxonomy Database).
+
+---
 
 #### Genome Assemblies
 
-**Precursor Genome** - precursor sequence file of the organism. See Genome
-Sequence Files above for more information on how to add files to the list of
-choices, how to remove them, and the necessary format of the files.
+##### Precursor Genome
 
-**Precursor Sequence Description Delimiter** - delimiter for the selected
-precursor sequence file. SDRAP will break the description line of each
-nucleotide sequence in the file into fields based on the specified delimiter and
-only consider the first field for future reference to the sequence. Please be
-sure to include a unique identifier as the first field in the description line
-of each nucleotide sequence across both the precursor and product sequence
-files.
+Precursor sequence file of the organism. See Genome Sequence Files above for
+more information on how to add files to the list of choices, how to remove them,
+and the necessary format of the files.
 
-**Product Genome** - product sequence file of the organism. See Genome Sequence
-Files above for more information on how to add files to the list of choices, how
-to remove them, and the necessary format of the files.
+##### Precursor Sequence Description Delimiter
 
-**Product Sequence Description Delimiter** - delimiter for the selected product
-sequence file. SDRAP will break the description line of each nucleotide sequence
-in the file into fields based on the specified delimiter and only consider the
-first field for future reference to the sequence. Please be sure to include a
-unique identifier as the first field in the description line of each nucleotide
-sequence across both the precursor and product sequence files.
+Delimiter for the selected precursor sequence file. SDRAP will break the
+description line of each nucleotide sequence in the file into fields based on
+the specified delimiter and only consider the first field for future reference
+to the sequence. Please be sure to include a unique identifier as the first
+field in the description line of each nucleotide sequence across both the
+precursor and product sequence files.
 
-**Telomere Pattern** - short nucleotide sequence whose repetition characterizes
-the telomeres of the organism. For example, if the telomeres of the organism
-consist of repetitions of the nucleotide sequence TTAGGG, then the value of the
-*Telomere Pattern* parameter should be specified as TTAGGG.
+##### Product Genome
+
+Product sequence file of the organism. See [Input genome sequence files](#input-genome-sequence-files)
+for more information on how to add files to the list of choices, how to remove
+them, and the necessary format of the files.
+
+##### Product Sequence Description Delimiter
+
+Delimiter for the selected product sequence file. SDRAP will break the
+description line of each nucleotide sequence in the file into fields based on
+the specified delimiter and only consider the first field for future reference
+to the sequence. Please be sure to include a unique identifier as the first
+field in the description line of each nucleotide sequence across both the
+precursor and product sequence files.
+
+##### Telomere Pattern
+
+* String over the alphabet {`A`, `C`, `G`, `T`}
+* `P` in [telomere detection algorithm](#telomere-detection-algorithm)
+
+Short nucleotide sequence motif whose tandem-repeats characterizes the telomeres
+of the organism. For example, if the telomeres of the organism consist of
+repetitions of the nucleotide sequence TTAGGG, then the value of the *Telomere
+Pattern* parameter should be specified as TTAGGG.
+
+---
 
 ### Optional Parameters
 
@@ -223,7 +261,7 @@ The minimum length of a telomere. If the value of this parameter is set to a
 value less than or equal to the length of the parameter *Telomere Pattern*, the
 length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
-
+---
 
 #### Arrangement Annotation Parameters
 **Minimum HSP Length for Match Annotation** - (positive integer; **DEFAULT**: 18; *l* in algorithmic description below) The value of this parameter determines the minimum length a high-scoring pair provided by BLAST must have to be considered for match annotation.
@@ -252,7 +290,122 @@ length of the parameter *Telomere Pattern* becomes the effective minimum length.
 
 **Minimum Coverage of Product Interval for Fragment Annotation** - (decimal number between 0 and 1; **DEFAULT**: 0.2; *s* in algorithmic description below) The minimum proportion of the product interval of a preliminary match covered by the product interval of a high-scoring pair provided by BLAST to be considered for annotation as fragment inheriting the index of the overlapping preliminary match.
 
-To understand the meaning of these parameters and the effect their values have on the outcome of the computation, one may first need to understand the algorithm by which SDRAP computes the arrangements of the product sequences on the precursor sequences. The algorithm is described here at a high level (we use variables *l*, *t*, *g*, *b*, *q*, *b'*, *q'*, *c*, *u*, *v*, *b'*, *q'*, *r* and *s* referenced in the description of the corresponding parameters above). The algorithmic description is preceded with two definitions and broken into 3 steps.
+---
+
+#### Properties Parameters
+**Minimum Coverage of Product Sequence for Arrangement Property Computation** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the arrangement properties of the arrangement between the two sequences to be computed.
+
+**Maximum Tolerance for Overlapping Precursor Intervals during Arrangement Property Computation** - (nonnegative integer; **DEFAULT**: 5) The maximum intersection size of the precursor intervals of two matches in an arrangement to be considered disjoint. Note that whenever the precursor interval of one matche is completely contained in the precursor interval of another match in an arrangement, then the two matches are not considered disjoint, independent from the value for this parameter, or the size of the intersection.
+
+**Maximum Number of Non Repeating and Non Overlapping Subarrangements for Arrangement Property Computation** - (positive integer; **DEFAULT**: 4) The maximum number of maximal subarrangements of an arrangement (maximal with the property of being nonrepeating and pairwise nonoverlapping) whose properties are considered in the arrangement property computation.
+
+**Complete** - (checkbox; **DEFAULT**: not checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must equal the set of indices of the overall arrangement, for the subarrangement to be considered nonscrambled; else, this property is not required.
+
+**Consecutive** - (checkbox; **DEFAULT**: checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must form a consecutive set of integers, for the subarrangement to be considered nonscrambled; else, this proeprty is not required.
+
+**Ordered** - (checkbox; **DEFAULT**: checked) If checked, the precursor intervals of the matches in a non repeating and non overlapping subarrangement of an arrangement, ordered by their starting coordinate, must occur in the same order, or complete reverse of the order the corresponding product intervals occur on the product sequence.
+
+---
+
+#### Output Parameters
+**Minimum Coverage of Product Sequence for Output** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the annotations resulting from the arrangement to be output.
+
+**Use SDRAP Aliases** - (checkbox; **DEFAULT**: not checked) If checked, SDRAP will output annotation with the DNA sequences labelled numerically in the order they were read into the program; else, SDRAP will use the primary identifiers listed in the input sequence files to refer to each sequence in its output.
+
+**Output Gap Annotations on Product Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of gaps on the product sequences; else, it will not.
+
+**Output Fragment Annotations on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of fragments on the precursor sequences; else, it will not.
+
+**Give Complementary Intervals to Precursor Intervals of Matches on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of intervals complementary to the precursor intervals of matches on the precursor sequences; else, it will not.
+
+**Minimum Length of Complementary Intervals** - (positive integer; **DEFAULT**: 4) minimum size of an interval in the complement the precursor intervals of the matches of an arrangement in a precursor sequence; for the interval to be included in the output.
+
+**Give a Summary of the Outcome** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output a table containing a range of numbers which reflect some key values which summarize the outcome of the computation (see Output).
+
+---
+
+## Algorithm
+
+### Telomere detection algorithm
+
+The variables `P`, `o`, `l`, `e`, `h`, and `m` referenced here refer to the
+corresponding [required](#required-parameters) and [optional](#optional-parameters)
+parameters.
+
+The algorithm takes as input:
+* `S` - Product sequence (string over alphabet {`A`, `C`, `G`, `T`})
+* `P` - Telomere pattern (string over alphabet {`A`, `C`, `G`, `T`})
+* `e` - Relative error limit (real number between 0 and 1)
+* `h` - Cumulative error limit (non-negative integer)
+* `l` - Maximum length (positive integer)
+* `o` - Maximum distance to sequence end (non-negative integer)
+* `m` - Minimum length (non-negative integer)
+
+The algorithm returns:
+* `false` if no telomere was detected
+* Substring of `S` representing detected telomere at 5' end, otherwise
+
+1. Find first occurrence of a cyclic permutation `P'` of `P` at most `o` base
+   pairs from the 5' end of `S` and set `E <- P'` (return `false` if none was
+   found)
+2. Create a flawless telomeric sequence `F` for comparison (`F` is the sequence
+   obtained by concatenating `P` with itself ceiling of `(l + o) / |P|` times
+   and then cyclically permuting it in such a way that the cyclic permutation
+   `P'` detected in `S` in step 1 appears at the same position in `F`).
+3. Set `B` to be an empty buffer string, set `H <- 0`, set `D_old <- 0`.
+4. Repeat until `|B| + |E| = l`:
+   1. Add predecessor of the concatenation of `B` and `E` in `S` to the front
+      of `B`.
+   2. Compute the Levensthein distance `D_new` between the concatenated
+      substring `BE` of `S` with the corresponding substring of `F`.
+   3. If `D_new / |BE| > e`, end the loop.
+   4. If `D_new > D_old`, set `H <- H + 1`.
+   5. If `D_new <= D_old`, set `H <- max(0, H - 1)`.
+   6. If `H = 0`, set `E <- BE` and `H <- empty`.
+   7. Set `D_old <- D_new`.
+5. Repeat analogous versions of steps 3. and 4. to add basepairs to the right of
+   `E` in `S`.
+6. If `|E| >= m`, return `E`, else return `false`.
+
+Telomeres at the 3' end of product sequences are detected by applying the
+algorithm to the reverse complement of the suffix of length `o + l` of `S`.
+
+---
+
+### Alignment merging
+
+Sequence alignments are obtained using BLAST with the `-ungapped` flag to avoid
+falsely combining alignments that reflect sequences of unscrambled MDSs to
+single large gapped alignments. To avoid falsely leaving sets of alignments
+which reflect a single MDS fragmented, some of these ungapped sequence
+alignments are merged during the [Arrangement annotation step](#arrangement-annotation-algorithm).
+In this section, the criterion for two alignments to be merged is discussed. The
+variables `t`, and `d` referenced here refer to the correponding [optional
+parameters](#optional-parameters).
+
+Here, we neglect the actual sequences of sequence alignments and model sequence
+alignments as triples `([i,j], [k,l], o)` where `[i,j]` and `[k,l]` are integer
+intervals describing the positions of the aligned regions in the precursor and
+product, respectively, and where `o` is either `+`, or `-`, and indicates the
+orientation of the alignment. As opposed to BLAST, we have, `j >= i`, and `l >=
+k` always, even when `o = -`. The coordinates always refer to start and end
+coordinates of `+`-strand of the sequence.
+
+Given two alignments `M1 = ([i1, j1], [k1, l1], o1)` and `M2 = ([i2, j2], [c2,
+d2], o2)`, the ***distance*** between `M1` and `M2` is:
+```
+max(0, max(i1, i2) - min(j1, j2) - 1, max(k1, k2) - min(k1, k2) - 1)
+```
+
+![Illustration of distance between two alignments.](docs/images/alignment_merging_distance.png)
+
+---
+
+
+
+### Arrangement annotation algorithm
+
+The variables `l`, *t*, *g*, *b*, *q*, *b'*, *q'*, *c*, *u*, *v*, *b'*, *q'*, *r* and *s* referenced in the description of the corresponding parameters above). The algorithmic description is preceded with two definitions and broken into 3 steps.
 
 To represent regions of high similarity, we define a *match* of a product sequence on a precursor sequence to be a triple ([*a*, *b*], [*c*, *d*], *o*), where [*a*, *b*] is an integer interval indicating a region in the precursor sequence, [*c*, *d*] is an integer interval indicating a region in the product sequence and *o* is either 0, or 1 indicating the relative orientation of the two regions (*o*=1 means the two regions have the same orientation and *o*=0 means the two regions are oppositely oriented). A high-scoring pair, which is returned by BLAST can be viewed as a *match* in the obvious way.
 
@@ -301,95 +454,6 @@ In the third and last part, additional matches are extracted from the high-scori
  17. done
  18. return *A'* - the set of all additional matches and fragments between the two sequences.
 ```
-
-#### Properties Parameters
-**Minimum Coverage of Product Sequence for Arrangement Property Computation** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the arrangement properties of the arrangement between the two sequences to be computed.
-
-**Maximum Tolerance for Overlapping Precursor Intervals during Arrangement Property Computation** - (nonnegative integer; **DEFAULT**: 5) The maximum intersection size of the precursor intervals of two matches in an arrangement to be considered disjoint. Note that whenever the precursor interval of one matche is completely contained in the precursor interval of another match in an arrangement, then the two matches are not considered disjoint, independent from the value for this parameter, or the size of the intersection.
-
-**Maximum Number of Non Repeating and Non Overlapping Subarrangements for Arrangement Property Computation** - (positive integer; **DEFAULT**: 4) The maximum number of maximal subarrangements of an arrangement (maximal with the property of being nonrepeating and pairwise nonoverlapping) whose properties are considered in the arrangement property computation.
-
-**Complete** - (checkbox; **DEFAULT**: not checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must equal the set of indices of the overall arrangement, for the subarrangement to be considered nonscrambled; else, this property is not required.
-
-**Consecutive** - (checkbox; **DEFAULT**: checked) If checked, the set of indices of the matches in a non repeating and non overlapping subarrangement of an arrangement must form a consecutive set of integers, for the subarrangement to be considered nonscrambled; else, this proeprty is not required.
-
-**Ordered** - (checkbox; **DEFAULT**: checked) If checked, the precursor intervals of the matches in a non repeating and non overlapping subarrangement of an arrangement, ordered by their starting coordinate, must occur in the same order, or complete reverse of the order the corresponding product intervals occur on the product sequence.
-
-#### Output Parameters
-**Minimum Coverage of Product Sequence for Output** - (integer between 0 and 100; **DEFAULT**: 50) The minimum proportion of the region of the product sequence between the telomeres, (if any,) which must be covered by preliminary matches of a precursor sequence, for the annotations resulting from the arrangement to be output.
-
-**Use SDRAP Aliases** - (checkbox; **DEFAULT**: not checked) If checked, SDRAP will output annotation with the DNA sequences labelled numerically in the order they were read into the program; else, SDRAP will use the primary identifiers listed in the input sequence files to refer to each sequence in its output.
-
-**Output Gap Annotations on Product Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of gaps on the product sequences; else, it will not.
-
-**Output Fragment Annotations on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of fragments on the precursor sequences; else, it will not.
-
-**Give Complementary Intervals to Precursor Intervals of Matches on Precursor Sequences** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output the annotations of intervals complementary to the precursor intervals of matches on the precursor sequences; else, it will not.
-
-**Minimum Length of Complementary Intervals** - (positive integer; **DEFAULT**: 4) minimum size of an interval in the complement the precursor intervals of the matches of an arrangement in a precursor sequence; for the interval to be included in the output.
-
-**Give a Summary of the Outcome** - (checkbox; **DEFAULT**: checked) If checked, SDRAP will output a table containing a range of numbers which reflect some key values which summarize the outcome of the computation (see Output).
-
-
-## Background
-
-Some organisms, such as the ciliate *Oxytricha trifallax*, have two types of
-nuclei encoding different genomes. During sexual reproduction, one of the
-nuclei, the somatic *macronucleus*, disintegrates and is replaced by the genetic
-material present in the other nucleus, the germline *micronucleus*. In order to
-build a functional macronucleus from the DNA in the micronucleus, DNA segments
-need to be extracted and rearranged. The *Scrambled DNA Rearrangement Annotation
-Pipeline* (*SDRAP*) (pronounced like "strap") is a web application which aligns
-DNA sequences from the two genomes, identifies matching regions between them and
-determines a number of properties related to and reflecting the intensity of the
-rearrangements necessary to obtain the macronucleus from the micronucleus.
-
-## Algorithm
-
-### Telomere detection algorithm
-
-Here the variables `t`, `o`, `l`, `e`, `h`, and `m` are referenced, which refer
-to the corresponding [telomere annotation parameters](#telomere-annotation-parameters).
-
-The algorithm takes as input:
-* `S` - Product sequence (string over alphabet {`A`, `C`, `G`, `T`})
-* `t` - Telomere pattern (string over alphabet {`A`, `C`, `G`, `T`})
-* `e` - Relative error limit (real number between 0 and 1)
-* `h` - Cumulative error limit (non-negative integer)
-* `l` - Maximum length (positive integer)
-* `o` - Maximum distance to sequence end (non-negative integer)
-* `m` - Minimum length (non-negative integer)
-
-The algorithm returns:
-* `false` if no telomere was detected
-* Substring of `S` representing detected telomere at 5' end, otherwise
-
-1. Find first occurrence of a cyclic permutation `t'` of `t` at most `o` base
-   pairs from the 5' end of `S` and set `E <- t'` (return `false` if none was
-   found)
-2. Create a flawless telomeric sequence `F` for comparison (`F` is the sequence
-   obtained by concatenating `t` with itself ceiling of `(l + o) / |t|` times
-   and then cyclically permuting it in such a way that the cyclic permutation
-   `t'` detected in `S` in step 1 appears at the same position in `F`).
-3. Set `B` to be an empty buffer string, set `H <- 0`, set `D_old <- 0`.
-4. Repeat until `|B| + |E| = l`:
-   1. Add predecessor of the concatenation of `B` and `E` in `S` to the front
-      of `B`.
-   2. Compute the Levensthein distance `D_new` between the concatenated
-      substring `BE` of `S` with the corresponding substring of `F`.
-   3. If `D_new / |BE| > e`, end the loop.
-   4. If `D_new > D_old`, set `H <- H + 1`.
-   5. If `D_new <= D_old`, set `H <- max(0, H - 1)`.
-   6. If `H = 0`, set `E <- BE` and `H <- empty`.
-   7. Set `D_old <- D_new`.
-5. Repeat analogous versions of steps 3. and 4. to add basepairs to the right of
-   `E` in `S`.
-6. If `|E| >= m`, return `E`, else return `false`.
-
-Telomeres at the 3' end of product sequences are detected by applying the
-algorithm to the reverse complement of the suffix of length `o + l` of `S`.
-
-
 
 
 
