@@ -50,7 +50,7 @@ older and newer versions of these softwares may cause unexpected behaviors.
    be inside the website root directory of your machine to be accessible
    remotely via internet browser)
 2. Open a terminal window and `cd` into the SDRAP directory
-3. Run the command `./install` (might require sudo rights)
+3. Run the command `./install.sh` (might require sudo rights)
 4. In some systems, the SELinux context of the tmp directory created in the
    SDRAP directory during the previous step must be changed to give apache
    sufficient privileges to work with the temporary files it creates. The exact
