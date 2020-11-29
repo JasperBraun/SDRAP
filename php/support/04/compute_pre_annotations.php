@@ -82,8 +82,12 @@ function compute_pre_annotations( array $inter_tel_interval, $prod_nuc_id, array
 
     // check which previously established matches should be merged with the hsp
     // and merge them with the hsp removing them from the new_match_array
-    $merged_hsp = merge( $hsp, $pre_match_array, $INPUT['MERGE_TOLERANCE'],
-        $INPUT['MERGE_MAX_GAP'] );
+    if ( $INPUT['MERGE_USE'] ) {
+      $merged_hsp = merge( $hsp, $pre_match_array, $INPUT['MERGE_TOLERANCE'],
+          $INPUT['MERGE_MAX_GAP'] );
+    } else {
+      $merged_hsp = $hsp;
+    }
 
     // check which previously established matches should be replaced by merged hsp
     replace( $merged_hsp, $pre_match_array, $INPUT['PRE_MATCH_MIN_COVERAGE_ADDITION'] );

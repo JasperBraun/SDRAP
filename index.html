@@ -253,6 +253,141 @@
       </div>  <!-- /.col-md-6 -->
 
       <div class="col-md-6">
+
+        <!-- BLAST Parameters -->
+        <div class="panel panel-default">
+          <div class="panel-heading">BLAST
+            <button type="button" data-toggle="collapse" data-target="#blastParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
+          </div>
+          <div id=blastParameters class="panel-body collapse">
+
+            <!-- BLAST_TASK -->
+            <div class="form-group form-group-sm">
+              <label for="blast-task" class="col-sm-2 control-label">Task</label>
+              <div class="col-sm-10">
+                <select class="form-control" id="blast-task">
+                  <option>megablast</option>
+                  <option>blastn</option>
+                  <option>dc-megablast</option>
+                  <option>blastn-short</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- BLAST_SCORING -->
+            <div class="form-group form-group-sm">
+              <label for="blast-scoring" class="col-sm-2 control-label">Scoring parameters (reward, penalty, gapopen, gapextend)</label>
+              <div class="col-sm-10">
+                <select class="form-control" id="blast-scoring">
+                  <option>1, 2, 0, 2.5 (megablast only)</option>
+                  <option>1, 2, 2, 2</option>
+                  <option>1, 2, 1, 2</option>
+                  <option>1, 2, 0, 2</option>
+                  <option>1, 2, 3, 1</option>
+                  <option>1, 2, 2, 1</option>
+                  <option>1, 2, 1, 1</option>
+                  <option>1, 5, 0, 5.5 (megablast only)</option>
+                  <option>1, 5, 3, 3</option>
+                  <option>1, 4, 0, 4.5 (megablast only)</option>
+                  <option>1, 4, 1, 2</option>
+                  <option>1, 4, 0, 2</option>
+                  <option>1, 4, 2, 1</option>
+                  <option>1, 4, 1, 1</option>
+                  <option>2, 7, 0, 8 (megablast only)</option>
+                  <option>2, 7, 2, 4</option>
+                  <option>2, 7, 0, 4</option>
+                  <option>2, 7, 4, 2</option>
+                  <option>2, 7, 2, 2</option>
+                  <option>1, 3, 0, 3.5 (megablast only)</option>
+                  <option>1, 3, 2, 2</option>
+                  <option>1, 3, 1, 2</option>
+                  <option>1, 3, 0, 2</option>
+                  <option>1, 3, 2, 1</option>
+                  <option>1, 3, 1, 1</option>
+                  <option>2, 5, 0, 6 (megablast only)</option>
+                  <option>2, 5, 2, 4</option>
+                  <option>2, 5, 0, 4</option>
+                  <option>2, 5, 4, 2</option>
+                  <option>2, 5, 2, 2</option>
+                  <option>2, 3, 0, 4 (megablast only)</option>
+                  <option>2, 3, 4, 4</option>
+                  <option>2, 3, 2, 4</option>
+                  <option>2, 3, 0, 4</option>
+                  <option>2, 3, 3, 3</option>
+                  <option>2, 3, 6, 2</option>
+                  <option>2, 3, 5, 2</option>
+                  <option>2, 3, 4, 2</option>
+                  <option>2, 3, 2, 2</option>
+                  <option>3, 4, 6, 3</option>
+                  <option>3, 4, 5, 3</option>
+                  <option>3, 4, 4, 3</option>
+                  <option>3, 4, 6, 2</option>
+                  <option>3, 4, 5, 2</option>
+                  <option>3, 4, 4, 2</option>
+                  <option>4, 5, 6, 5</option>
+                  <option>4, 5, 5, 5</option>
+                  <option>4, 5, 4, 5</option>
+                  <option>4, 5, 3, 5</option>
+                  <option>1, 1, 3, 2</option>
+                  <option>1, 1, 2, 2</option>
+                  <option>1, 1, 1, 2</option>
+                  <option>1, 1, 0, 2</option>
+                  <option>1, 1, 4, 1</option>
+                  <option>1, 1, 3, 1</option>
+                  <option>1, 1, 2, 1</option>
+                  <option>3, 2, 5, 5</option>
+                  <option>5, 4, 10, 6</option>
+                  <option>5, 4, 8, 6</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- BLAST_UNGAPPED -->
+            <div id="blast_ungapped" class="form-group form-group-sm has-feedback">
+              <label for="blast-ungapped" class="col-sm-9 control-label">Ungapped</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="blast-ungapped" 
+                       aria-describedby="blast-ungapped-error-status"
+                       checked>
+                <span id="blast_ungapped-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="blast-ungapped-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
+
+            <!-- BLAST_XDROP_GAP -->
+            <div id="blast_xdrop_gap" class="form-group form-group-sm has-feedback">
+              <label for="blast-xdropGap" class="col-sm-9 control-label">Max cumulative error</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="blast-xdropGap" 
+                       placeholder="ex: 30"
+                       aria-describedby="blast-xdropGap-error-status" 
+                       value="30">
+                <span id="blast_xdrop_gap-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="blast-xdropGap-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+            <!-- BLAST_XDROP_GAP_FINAL -->
+            <div id="blast_xdrop_gap_final" class="form-group form-group-sm has-feedback">
+              <label for="blast-xdropGapFinal" class="col-sm-9 control-label">Max cumulative error</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="text" 
+                       id="blast-xdropGapFinal" 
+                       placeholder="ex: 30"
+                       aria-describedby="blast-xdropGapFinal-error-status" 
+                       value="30">
+                <span id="blast_xdrop_gap_final-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="blast-xdropGapFinal-error-status" class="sr-only">(error)</span>                       
+              </div>
+            </div>
+
+          </div>
+        </div>
       
         <!-- Telomere Annotation Parameters -->
         <div class="panel panel-default">
@@ -345,6 +480,20 @@
             <button type="button" data-toggle="collapse" data-target="#mergeParameters" style="float: right;"> <span class="glyphicon glyphicon-chevron-down"></span> </button>
           </div>
           <div id=mergeParameters class="panel-body collapse">
+
+            <!-- MERGE_USE -->
+            <div id="merge_use" class="form-group form-group-sm has-feedback">
+              <label for="merge-use" class="col-sm-9 control-label">Merge alignments</label>
+              <div class="col-sm-3">
+                <input class="form-control" 
+                       type="checkbox" 
+                       id="merge-use" 
+                       aria-describedby="merge-use-error-status"
+                       checked>
+                <span id="merge_use-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>                       
+                <span id="merge-use-error-status" class="sr-only">(error)</span>
+              </div>
+            </div>
 
             <!-- MERGE_TOLERANCE -->
             <div id="merge_tolerance" class="form-group form-group-sm has-feedback">

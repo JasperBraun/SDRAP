@@ -75,8 +75,13 @@ function compute_add_annotations( array $inter_tel_interval, $prod_nuc_id, array
 
     // check which previously established matches should be merged with the hsp
     // and merge them with the hsp removing them from the new_match_array
-    $merged_hsp = merge( $hsp, $add_match_array, $INPUT['MERGE_TOLERANCE'],
-        $INPUT['MERGE_MAX_GAP'] );
+    if ( $INPUT['MERGE_USE'] ) {
+      $merged_hsp = merge( $hsp, $add_match_array, $INPUT['MERGE_TOLERANCE'],
+          $INPUT['MERGE_MAX_GAP'] );
+    } else {
+      $merged_hsp = $hsp;
+    }
+    
 
     // add a match or fragment to add_match_array for each preliminary match the hsp sufficiently
     // overlaps with

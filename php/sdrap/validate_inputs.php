@@ -4,8 +4,7 @@
 // base directory for input, output and temporary files of the program
 $BASE_DIRECTORY = str_replace( "/php/sdrap", "/", __DIR__ );
 
-// parameters for blast; currently not userdefined to avoid command line injection
-$BLAST_PARAMETERS = "-task megablast -ungapped -lcase_masking -word_size 18 -dust no -max_hsps 10000 -max_target_seqs 10000";
+// file extensions for removal of blast database after finished
 $BLAST_DATABASE_FILE_EXTENSIONS = array( ".nhr", ".nin", ".nog", ".nsd", ".nsi", ".nsq" );
 
 // maximum number of rows in data files used for bulk uploads into tables
@@ -46,6 +45,11 @@ $INPUT = array(
   "STRAIN" => filter_input( INPUT_POST, 'strain', FILTER_SANITIZE_STRING ),
   "TAXONOMY_ID" => intval( filter_input( INPUT_POST, 'taxonomy_id', FILTER_SANITIZE_NUMBER_INT ) ),
   "TELO_PATTERN" => filter_input( INPUT_POST, 'telo_pattern', FILTER_SANITIZE_STRING ),
+  "BLAST_TASK" => filter_input( INPUT_POST, 'blast_task', FILTER_SANITIZE_STRING ),
+  "BLAST_SCORING" => filter_input( INPUT_POST, 'blast_scoring', FILTER_SANITIZE_STRING ).rtrim(" (megablstony)"),
+  "BLAST_UNGAPPED" => filter_input( INPUT_POST, 'blast_ungapped', FILTER_VALIDATE_BOOLEAN ),
+  "BLAST_XDROP_GAP" => filter_input( INPUT_POST, 'blast_xdrop_gap', FILTER_SANITIZE_NUMBER_FLOAT ),
+  "BLAST_XDROP_GAP_FINAL" => filter_input( INPUT_POST, 'blast_xdrop_gap_final', FILTER_SANITIZE_NUMBER_FLOAT ),
   "TELO_ERROR_LIMIT" => floatval( filter_input( INPUT_POST, 'telo_error_limit', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) ),
   "TELO_BUFFER_LIMIT" => intval( filter_input( INPUT_POST, 'telo_buffer_limit', FILTER_SANITIZE_NUMBER_INT ) ),
   "TELO_MAX_LENGTH" => intval( filter_input( INPUT_POST, 'telo_max_length', FILTER_SANITIZE_NUMBER_INT ) ),
@@ -55,6 +59,7 @@ $INPUT = array(
   "PRE_MATCH_MIN_BITSCORE" => intval( filter_input( INPUT_POST, 'pre_match_min_bitscore', FILTER_SANITIZE_NUMBER_INT ) ),
   "PRE_MATCH_MIN_PIDENT" => floatval( filter_input( INPUT_POST, 'pre_match_min_pident', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) ),
   "PRE_MATCH_MIN_COVERAGE_ADDITION" => intval( filter_input( INPUT_POST, 'pre_match_min_coverage_addition', FILTER_SANITIZE_NUMBER_INT ) ),
+  "MERGE_USE" => filter_input( INPUT_POST, 'merge_use', FILTER_VALIDATE_BOOLEAN ),
   "MERGE_TOLERANCE" => intval( filter_input( INPUT_POST, 'merge_tolerance', FILTER_SANITIZE_NUMBER_INT ) ),
   "MERGE_MAX_GAP" => intval( filter_input( INPUT_POST, 'merge_max_gap', FILTER_SANITIZE_NUMBER_INT ) ),
   "GAP_MIN_LENGTH" => intval( filter_input( INPUT_POST, 'gap_min_length', FILTER_SANITIZE_NUMBER_INT ) ),
@@ -78,6 +83,20 @@ $INPUT = array(
   "OUTPUT_MIN_COMPLEMENT_LENGTH" => intval( filter_input( INPUT_POST, 'output_min_complement_length', FILTER_SANITIZE_NUMBER_INT ) ),
   "OUTPUT_GIVE_SUMMARY" => filter_input( INPUT_POST, 'output_give_summary', FILTER_VALIDATE_BOOLEAN )
 );
+
+// construct blast parameter string
+$scoring_parameters = explode(", ", $INPUT["BLAST_SCORING"]);
+$BLAST_PARAMETERS = "-task " . $INPUT['BLAST_TASK'];
+if ( $INPUT['BLAST_UNGAPPED'] ) {
+  $BLAST_PARAMETERS .= " -ungapped"
+}
+$BLAST_PARAMETERS .= " -lcase_masking -word_size 18 -dust no -max_hsps 10000 -max_target_seqs 10000";
+$BLAST_PARAMETERS .= " -reward " . $scoring_parameters[0];
+$BLAST_PARAMETERS .= " -penalty -" . $scoring_parameters[1];
+$BLAST_PARAMETERS .= " -gapopen " . $scoring_parameters[2];
+$BLAST_PARAMETERS .= " -gapextend " . $scoring_parameters[3];
+$BLAST_PARAMETERS .= " -xdrop_gap " . $INPUT['BLAST_XDROP_GAP'];
+$BLAST_PARAMETERS .= " -xdrop_gap_final " . $INPUT['BLAST_XDROP_GAP_FINAL'];
 
 // validate user inputs
 validate( $_POST, $INPUT, $ERRORS, $BASE_DIRECTORY );
