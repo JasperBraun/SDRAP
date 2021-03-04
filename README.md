@@ -1,4 +1,4 @@
-# SDRAP - Scrambled DNA Rearrangement Annotation Pipeline
+# SDRAP - Scrambled DNA Rearrangement Annotation Protocol
 
 SDRAP is a web application which annotates DNA segments in DNA rearrangement
 precursor and product genomes which describe the rearrangement, and computes
@@ -39,7 +39,7 @@ ciliate DNA rearrangements.
 
 SDRAP was written on a **CentOS 6.7** machine with **PHP 5.3.3**,
 **MySQL 5.6.31** and **Apache 2.2.15**. SDRAP makes use of the Basic Local
-Alignment Search Tool (BLAST). In particular, the pipeline was tested using the
+Alignment Search Tool (BLAST). In particular, the procedure was tested using the
 **blastn** command of the BLAST+ software suite at version **2.2.31**. Backwards
 Compatibility with other versions of these softwares cannot be guaranteed, so
 older and newer versions of these softwares may cause unexpected behaviors.
@@ -62,11 +62,11 @@ older and newer versions of these softwares may cause unexpected behaviors.
 
 Simply open up SDRAP in a browser, enter required parameters, select desired
 genome sequence files and click the "Annotate" button. The execution of the
-pipeline may take a few minutes to several hours depending on the size of the
+procedure may take a few minutes to several hours depending on the size of the
 input dataset; make sure your browser does not time out during the execution of
-the pipeline.
+the software.
 
-As input to the pipeline, the correct precursor and product sequence files must
+As input to the protocol, the correct precursor and product sequence files must
 be selected (see [Input genome sequence files](#input-genome-sequence-files)),
 required parameters must be specified (see [Required parameters](#required-parameters)),
 and if desired, optional parameters can be specified (see [Optional parameters](#optional-parameters)).
@@ -705,10 +705,10 @@ The algorithm returns:
 
 ## Output
 
-When SDRAP runs on a dataset, the pipeline creates a subdirectory to its
+When SDRAP runs on a dataset, the software creates a subdirectory to its
 `annotations` directory and fills it with sequence files, annotations files and
 a few additional data files. The name of the subdirectory will be identical to
-the name of the MySQL database created by the pipeline (see the corresponding
+the name of the MySQL database created by the procedure (see the corresponding
 [required parameters](#mysql-database)). In this section, all files which SDRAP
 outputs into this subdirectory is briefly described. `<database_name>` refers to
 the name of the MySQL database (same as name of subdirectory).
@@ -807,7 +807,7 @@ input genome files in the second column.
 
 A tab-delimited file containing a descriptor of each parameter (except for the
 MySQL password used) in the first column and the value of the parameter used
-during pipeline execution in the second column.
+during software execution in the second column.
 
 #### `<database_name>_properties.tsv`
 
@@ -817,5 +817,6 @@ the header. (1 = true, 0 = false)
 
 #### `<database_name>_summary.tsv`
 
-A tab-delimited file with descriptions of numbers associated with the pipeline
+A tab-delimited file with descriptions of numbers associated with the software
+
 execution in the first column and the corresponding values in the second column.
