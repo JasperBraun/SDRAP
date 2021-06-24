@@ -570,8 +570,9 @@ algorithm to the reverse complement of the suffix of length `o + l` of `S`.
 
 ### Alignment merging
 
-Sequence alignments are obtained using BLAST with the `-ungapped` flag to avoid
-falsely combining alignments that reflect sequences of unscrambled MDSs to
+Sequence alignments are obtained using BLAST with the `-ungapped` flag (full parameter list:
+`-task megablast -ungapped -lcase\_masking -word\_size 18 -dust no -max\_hsps 10000 -max\_target\_seqs 10000`)
+to avoid falsely combining alignments that reflect sequences of unscrambled MDSs to
 single large gapped alignments. To avoid falsely leaving sets of alignments
 which reflect a single MDS fragmented, some of these ungapped sequence
 alignments are merged during the [Preliminary annotation step](#preliminary-annotation-algorithm)
