@@ -29,8 +29,9 @@ function create_parameter_table( $LINK, array &$ERRORS ) {
     `merge_tolerance`                     INT(10)         COMMENT 'maximum shift allowed between precursor segments and between product segments of two matches to still be considered for merging',
     `merge_max_gap`                       INT(10)         COMMENT 'maximum gap allowed between precursor segments and between product segments of two matches to still be considered for merging',
     `gap_min_length`                      INT(10)         COMMENT 'minimum length of non covered basepairs require_onced for a gap to be annotated',
+    `compute_pointers`                    TINYINT(1)      COMMENT 'indicates whether or not pointers will be computed (1 means yes/true, 0 means no/false)',
     `pointer_min_length`                  INT(10)         COMMENT 'minimum length of overlap between product segments of preliminary matches require_onced for a pointer to be annotated',
-    `add_match_min_biscore`               INT(10)         COMMENT 'minimum bitscore require_onced for HSPs used for additional matches',
+    `add_match_min_bitscore`              INT(10)         COMMENT 'minimum bitscore require_onced for HSPs used for additional matches',
     `add_match_min_pident`                DECIMAL(5,2)    COMMENT 'minimum percent identity require_onced for HSPs used for additional matches',
     `add_match_min_prod_segment_overlap`  DECIMAL(4,3)    COMMENT 'minimum portion of product segment of preliminary match contained in product segment of additional match require_onced for additional match to be annotated as match with the index of that preliminary match',
     `fragment_min_prod_segment_overlap`   DECIMAL(4,3)    COMMENT 'minimum portion of product segment of preliminary match contained in product segment of HSP require_onced for HSP to be annotated as fragment with the index of that preliminary match',
@@ -41,8 +42,12 @@ function create_parameter_table( $LINK, array &$ERRORS ) {
     `scr_consecutive`                     TINYINT(1)      COMMENT 'indicates whether or not consecutivenss is require_onced for a non repeating and non p-overlapping subarrangement to be considered non scrambled (1 means yes/true, 0 means no/false)',
     `scr_ordered`                         TINYINT(1)      COMMENT 'indicates whether or not orderedness is require_onced for a non repeating and non p-overlapping subarrangement to be considered non scrambled (1 means yes/true, 0 means no/false)',
     `output_min_coverage`                 INT(10)         COMMENT 'minimum portion of part of product sequence between telomeres covered by product segments of preliminary matches of a precursor sequence require_onced for annotations of precursor segments, product segments, fragments, gaps, and pointers to be included in output files',
-    `output_give_summary`                 TINYINT(1)      COMMENT 'indicates whether the a summary of interesting values should be included in the output (1 means yes/true, 0 means no/false)',
-    `output_use_alias`                    TINYINT(1)      COMMENT 'indicates whether the program should reference sequences in its output by the identifier assigned by the program (1 means yes/true, 0 means no/false)'
+    `output_give_summary`                 TINYINT(1)      COMMENT 'indicates whether the summary of interesting values should be included in the output (1 means yes/true, 0 means no/false)',
+    `output_use_alias`                    TINYINT(1)      COMMENT 'indicates whether the program should reference sequences in its output by the identifier assigned by the program (1 means yes/true, 0 means no/false)',
+    `output_gaps`                         TINYINT(1)      COMMENT 'indicates whether or not to output the annotations of gaps on the product sequences (1 means yes/true, 0 means no/false)',
+    `output_fragments`                    TINYINT(1)      COMMENT 'indicates whether or not to output the annotations of fragments on the precursor sequences (1 means yes/true, 0 means no/false)',
+    `output_give_complement`              TINYINT(1)      COMMENT 'indicates whether or not to output the annotations of intervals complementary to the precursor intervals of matches on the precursor sequences (1 means yes/true, 0 means no/false)',
+    `output_min_complement_length`        TINYINT(1)      COMMENT 'minimum number of basepairs between two consecutive matches in the precursor for the interval to be annotated as match-complementary region'
   )  ENGINE = InnoDB 
      COMMENT 'table of user defined parameters used when running the pipeline';" );
 

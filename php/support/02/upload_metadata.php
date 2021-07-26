@@ -41,11 +41,16 @@ function upload_parameters( $LINK, array $INPUT ) {
   $result = true;
 
   $date = date("Y-m-d-H-i");
-  $scr_criteria_complete = (int) $INPUT['SCR_COMPLETE'];
-  $scr_criteria_consecutive = (int) $INPUT['SCR_CONSECUTIVE'];
-  $scr_criteria_ordered = (int) $INPUT['SCR_ORDERED'];
+  $compute_pointers = (int) $INPUT['COMPUTE_POINTERS'];
+  $scr_complete = (int) $INPUT['SCR_COMPLETE'];
+  $scr_consecutive = (int) $INPUT['SCR_CONSECUTIVE'];
+  $scr_ordered = (int) $INPUT['SCR_ORDERED'];
   $output_give_summary = (int) $INPUT['OUTPUT_GIVE_SUMMARY'];
   $output_use_alias = (int) $INPUT['OUTPUT_USE_ALIAS'];
+  $output_gaps = (int) $INPUT['OUTPUT_GAPS'];
+  $output_fragments = (int) $INPUT['OUTPUT_FRAGMENTS'];
+  $output_give_complement = (int) $INPUT['OUTPUT_GIVE_COMPLEMENT'];
+  $output_min_complement_length = (int) $INPUT['OUTPUT_MIN_COMPLEMENT_LENGTH'];
   if ( mysqli_query ( $LINK,
     "INSERT INTO `parameter` VALUES (
      '1',
@@ -73,6 +78,7 @@ function upload_parameters( $LINK, array $INPUT ) {
      '{$INPUT['MERGE_TOLERANCE']}',
      '{$INPUT['MERGE_MAX_GAP']}',
      '{$INPUT['GAP_MIN_LENGTH']}',
+     '{$compute_pointers}',
      '{$INPUT['POINTER_MIN_LENGTH']}',
      '{$INPUT['ADD_MATCH_MIN_BITSCORE']}',
      '{$INPUT['ADD_MATCH_MIN_PIDENT']}',
@@ -81,12 +87,16 @@ function upload_parameters( $LINK, array $INPUT ) {
      '{$INPUT['PROPERTY_MIN_COVERAGE']}',
      '{$INPUT['PROPERTY_MAX_MATCH_OVERLAP']}',
      '{$INPUT['PROPERTY_CLIQUE_LIMIT']}',
-     '{$scr_criteria_complete}',
-     '{$scr_criteria_consecutive}',
-     '{$scr_criteria_ordered}',
+     '{$scr_complete}',
+     '{$scr_consecutive}',
+     '{$scr_ordered}',
      '{$INPUT['OUTPUT_MIN_COVERAGE']}',
      '{$output_give_summary}',
-     '{$output_use_alias}'
+     '{$output_use_alias}',
+     '{$output_gaps}',
+     '{$output_fragments}',
+     '{$output_give_complement}',
+     '{$output_min_complement_length}'
     );"
   ) === false ) { $result = false; }
 
