@@ -35,7 +35,7 @@ function output_prod_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
       '[left-flanking-match-ptr-prec-start]_[left-flanking-match-ptr-prec-end]_' . 
       '[right-flanking-match-index]_[right-flanking-match-ptr-prec-start]_' .
       '[right-flanking-match-ptr-prec-end]_[arrangement-coverage]_[non-gapped]_' .
-      '[exceeded-clique-limit]_[weakly-non-scrambled]_[strongly-non-scrambled]" itemRgb-"On"' );
+      '[exceeded-clique-limit]_[weakly-scrambled]_[strongly-scrambled]" itemRgb-"On"' );
   while ( $pointer = mysqli_fetch_assoc( $prod_pointers_table ) ) {
 
     $prod_id = $OUTPUT_USE_ALIAS === true ? $pointer['prod_nuc_id'] : $pointer['prod_alias'];
@@ -43,9 +43,19 @@ function output_prod_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
     if ( $pointer['non_gapped'] === NULL ) {
       $suffix = "_" . $pointer['coverage'] . "_2_2_2_2";
     } else {
+      if ( $pointer['weakly_non_scrambled'] === 0 && $pointer['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 1;
+        $weakly_scrambled = 1;
+      } else if ( $pointer['weakly_non_scrambled'] === 1 && $pointer['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 1;
+      } else {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 0;
+      }
       $suffix = "_" . $pointer['coverage'] . "_" . $pointer['non_gapped'] . "_" .
-          $pointer['exceeded_clique_limit'] . "_" . $pointer['weakly_non_scrambled'] . "_" .
-          $pointer['strongly_non_scrambled'];
+          $pointer['exceeded_clique_limit'] . "_" . $weakly_scrambled . "_" .
+          $strongly_scrambled;
     }
 
     $prod_pointers_row = array( $prod_id, $pointer['prod_start'], $pointer['prod_end'],

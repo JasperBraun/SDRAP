@@ -82,8 +82,8 @@ function output_summary( $total_time, array $INPUT, array &$ERRORS, $LINK, array
       "arr_num_strongly_consecutive", // number of strongly consecutive high cov arrangements
       "arr_num_weakly_ordered", // number of weakly ordered high cov arrangements
       "arr_num_strongly_ordered", // number of strongly ordered high cov arrangements
-      "arr_num_weakly_non_scrambled", // number of weakly non scrambled high cov arrangements
-      "arr_num_strongly_non_scrambled", // number of strongly non scrambled high cov arrangements
+      "arr_num_weakly_scrambled", // number of weakly scrambled high cov arrangements
+      "arr_num_strongly_scrambled", // number of strongly scrambled high cov arrangements
       "arr_num_output" // number of arrangements with sufficient coverage for output
   );
   $summary_data = array_flip( $descriptions );

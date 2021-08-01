@@ -37,7 +37,7 @@ function output_properties( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERR
       "total_match_number", "non_gapped", "non_overlapping", "non_repeating",
       "exceeded_clique_limit", "weakly_complete", "strongly_complete",
       "weakly_consecutive", "strongly_consecutive", "weakly_ordered",
-      "strongly_ordered", "weakly_non_scrambled", "strongly_non_scrambled"
+      "strongly_ordered", "weakly_scrambled", "strongly_scrambled"
   );
   fwrite( $properties_file, implode( "\t", $header ) );
   while ( $table_row = mysqli_fetch_assoc( $properties_table ) ) {
@@ -45,14 +45,24 @@ function output_properties( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERR
     $prec_id = $OUTPUT_USE_ALIAS === true ? $table_row['prec_nuc_id'] : $table_row['prec_alias'];
     $prod_id = $OUTPUT_USE_ALIAS === true ? $table_row['prod_nuc_id'] : $table_row['prod_alias'];
 
+    if ( $table_row['weakly_non_scrambled'] === 0 && $table_row['strongly_non_scrambled'] === 0 ) {
+      $strongly_scrambled = 1;
+      $weakly_scrambled = 1;
+    } else if ( $table_row['weakly_non_scrambled'] === 1 && $table_row['strongly_non_scrambled'] === 0 ) {
+      $strongly_scrambled = 0;
+      $weakly_scrambled = 1;
+    } else {
+      $strongly_scrambled = 0;
+      $weakly_scrambled = 0;
+    }
+
     $file_row = array( $prec_id, $prod_id, $table_row['coverage'],
       $table_row['preliminary_match_number'], $table_row['total_match_number'],
       $table_row['non_gapped'], $table_row['non_overlapping'], $table_row['non_repeating'],
       $table_row['exceeded_clique_limit'], $table_row['weakly_complete'],
       $table_row['strongly_complete'], $table_row['weakly_consecutive'],
       $table_row['strongly_consecutive'], $table_row['weakly_ordered'],
-      $table_row['strongly_ordered'], $table_row['weakly_non_scrambled'],
-      $table_row['strongly_non_scrambled']
+      $table_row['strongly_ordered'], $weakly_scrambled, $strongly_scrambled
     );
 
     fwrite( $properties_file, "\n" . implode( "\t", $file_row ) );

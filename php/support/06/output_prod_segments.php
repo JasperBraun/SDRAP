@@ -33,8 +33,8 @@ function output_prod_segments( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
   $prod_segments_file = fopen( $DIRECTORIES['PROD_SEGMENTS_FILE'], "w" );
   fwrite( $prod_segments_file, '#track name="prod_segments" description="product segments ' .
       'labelled pre_match_[prec-id]_[prec-start]_[prec-end]_[index]_[pre-cov]_[add-cov]_' .
-      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-      '[strongly-non-scrambled]" itemRgb-"On"' );
+      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-scrambled]_' .
+      '[strongly-scrambled]" itemRgb-"On"' );
   while ( $segment = mysqli_fetch_assoc( $prod_segments_table ) ) {
 
     $prod_id = $OUTPUT_USE_ALIAS === true ? $segment['prod_nuc_id'] : $segment['prod_alias'];
@@ -42,9 +42,19 @@ function output_prod_segments( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
     if ( $segment['non_gapped'] === NULL ) {
       $suffix = "_" . $segment['coverage'] . "_2_2_2_2";
     } else {
+      if ( $segment['weakly_non_scrambled'] === 0 && $segment['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 1;
+        $weakly_scrambled = 1;
+      } else if ( $segment['weakly_non_scrambled'] === 1 && $segment['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 1;
+      } else {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 0;
+      }
       $suffix = "_" . $segment['coverage'] . "_" . $segment['non_gapped'] . "_" .
-          $segment['exceeded_clique_limit'] . "_" . $segment['weakly_non_scrambled'] . "_" .
-          $segment['strongly_non_scrambled'];
+          $segment['exceeded_clique_limit'] . "_" . $weakly_scrambled . "_" .
+          $strongly_scrambled;
     }
 
     $prod_segments_row = array( $prod_id, $segment['prod_start'], $segment['prod_end'],

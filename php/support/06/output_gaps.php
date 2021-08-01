@@ -32,16 +32,26 @@ function output_gaps( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERRORS, $
   $gaps_file = fopen( $DIRECTORIES['GAPS_FILE'], "w" );
   fwrite( $gaps_file, '#track name="gaps" description="gaps labelled ' .
       'gap_[prec-id]_[index]_[is-terminal]_[arrangement-coverage]_[non-gapped]_' .
-      '[exceeded-clique-limit]_[weakly-non-scrambled]_[strongly-non-scrambled]" itemRgb-"On"' );
+      '[exceeded-clique-limit]_[weakly-scrambled]_[strongly-scrambled]" itemRgb-"On"' );
   while ( $gap = mysqli_fetch_assoc( $gaps_table ) ) {
 
     $prod_id = $OUTPUT_USE_ALIAS === true ? $gap['prod_nuc_id'] : $gap['prod_alias'];
     if ( $gap['non_gapped'] === NULL ) {
       $suffix = "_" . $gap['coverage'] . "_2_2_2_2";
     } else {
+      if ( $gap['weakly_non_scrambled'] === 0 && $gap['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 1;
+        $weakly_scrambled = 1;
+      } else if ( $gap['weakly_non_scrambled'] === 1 && $gap['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 1;
+      } else {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 0;
+      }
       $suffix = implode( "_", array(
           $gap['coverage'], $gap['non_gapped'], $gap['exceeded_clique_limit'],
-          $gap['weakly_non_scrambled'], $gap['strongly_non_scrambled']
+          $weakly_scrambled, $strongly_scrambled
       ) );
     }
 

@@ -245,20 +245,20 @@ function add_arr_data( array &$summary_data, array $INPUT, array &$ERRORS, $LINK
     return false;
   }
 
-  // obtain number of weakly non scrambled high coverage arrangements
-  $query = "SELECT COUNT(*) FROM `properties` WHERE `weakly_non_scrambled` = 1;";
+  // obtain number of weakly scrambled high coverage arrangements
+  $query = "SELECT COUNT(*) FROM `properties` WHERE 'strongly_non_scrambled' = 0;";
 
-  if ( add_data( $summary_data['arr_num_weakly_non_scrambled'], $query, $ERRORS, $LINK ) ===
+  if ( add_data( $summary_data['arr_num_weakly_scrambled'], $query, $ERRORS, $LINK ) ===
       false ) {
     $ERRORS['other'][] = "Error while extracting data in " . basename(__FILE__,".php") .
         " near line " . __LINE__ . ".";
     return false;
   }
 
-  // obtain number of strongly non scrambled high coverage arrangements
-  $query = "SELECT COUNT(*) FROM `properties` WHERE `strongly_non_scrambled` = 1;";
+  // obtain number of strongly scrambled high coverage arrangements
+  $query = "SELECT COUNT(*) FROM `properties` WHERE 'weakly_non_scrambled' = 0 AND `strongly_non_scrambled` = 0;";
 
-  if ( add_data( $summary_data['arr_num_strongly_non_scrambled'], $query, $ERRORS, $LINK ) ===
+  if ( add_data( $summary_data['arr_num_strongly_scrambled'], $query, $ERRORS, $LINK ) ===
       false ) {
     $ERRORS['other'][] = "Error while extracting data in " . basename(__FILE__,".php") .
         " near line " . __LINE__ . ".";

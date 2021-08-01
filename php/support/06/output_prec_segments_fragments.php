@@ -35,15 +35,15 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
   $prec_segments_file = fopen( $DIRECTORIES['PREC_SEGMENTS_FILE'], "w" );
   fwrite( $prec_segments_file, '#track name="prec_segments" description="precursor segments ' .
       'labelled pre_match_[prod-id]_[prod-start]_[prod-end]_[index]_[pre-cov]_[add-cov]_' .
-      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-      '[strongly-non-scrambled]" itemRgb-"On"' );
+      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-scrambled]_' .
+      '[strongly-scrambled]" itemRgb-"On"' );
 
   if ( $OUTPUT_FRAGMENTS === true ) {
     $prec_fragments_file = fopen( $DIRECTORIES['PREC_FRAGMENTS_FILE'], "w" );
     fwrite( $prec_fragments_file, '#track name="prec_fragments" description="precursor fragments ' .
         'labelled frag_[prod-id]_[prod-start]_[prod-end]_[index]_[pre-cov]_[add-cov]_' .
-        '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-        '[strongly-non-scrambled]" itemRgb-"On"' );
+        '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-scrambled]_' .
+        '[strongly-scrambled]" itemRgb-"On"' );
   }
 
   if ( $OUTPUT_GIVE_COMPLEMENT === true ) {
@@ -91,12 +91,23 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
 
     $prec_id = $OUTPUT_USE_ALIAS === true ? $segment['prec_nuc_id'] : $segment['prec_alias'];
 
+    if ( $segment['weakly_non_scrambled'] === 0 && $segment['strongly_non_scrambled'] === 0 ) {
+      $strongly_scrambled = 1;
+      $weakly_scrambled = 1;
+    } else if ( $segment['weakly_non_scrambled'] === 1 && $segment['strongly_non_scrambled'] === 0 ) {
+      $strongly_scrambled = 0;
+      $weakly_scrambled = 1;
+    } else {
+      $strongly_scrambled = 0;
+      $weakly_scrambled = 0;
+    }
+
     if ( $segment['non_gapped'] === NULL ) {
       $suffix = "_" . $segment['coverage'] . "_2_2_2_2";
     } else {
       $suffix = "_" . $segment['coverage'] . "_" . $segment['non_gapped'] . "_" .
-          $segment['exceeded_clique_limit'] . "_" . $segment['weakly_non_scrambled'] . "_" .
-          $segment['strongly_non_scrambled'];
+          $segment['exceeded_clique_limit'] . "_" . $weakly_scrambled . "_" .
+          $strongly_scrambled;
     }
 
     if ( $segment['is_fragment'] === "0" ) {

@@ -38,8 +38,8 @@ function output_prod_hsp( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERROR
   $prod_hsp_file = fopen( $DIRECTORIES['PROD_HSP_FILE'], "w" );
   fwrite( $prod_hsp_file, '#track name="prod_HSPs" description="product segments of HSPs ' .
       'labelled hsp_[prec-nuc-id]_[prec-start]_[prec-end]_[bitscore]_[pident]_' .
-      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-      '[strongly-non-scrambled]" itemRgb-"On"' );
+      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-scrambled]_' .
+      '[strongly-scrambled]" itemRgb-"On"' );
   while ( $hsp = mysqli_fetch_assoc( $prod_hsp_table ) ) {
 
     $prec_id = $OUTPUT_USE_ALIAS === true ? $hsp['prec_nuc_id'] : $hsp['prec_alias'];
@@ -47,9 +47,19 @@ function output_prod_hsp( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERROR
     if ( $hsp['non_gapped'] === NULL ) {
       $suffix = "_" . $hsp['coverage'] . "_2_2_2_2";
     } else {
+      if ( $hsp['weakly_non_scrambled'] === 0 && $hsp['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 1;
+        $weakly_scrambled = 1;
+      } else if ( $hsp['weakly_non_scrambled'] === 1 && $hsp['strongly_non_scrambled'] === 0 ) {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 1;
+      } else {
+        $strongly_scrambled = 0;
+        $weakly_scrambled = 0;
+      }
       $suffix = "_" . $hsp['coverage'] . "_" . $hsp['non_gapped'] . "_" .
-          $hsp['exceeded_clique_limit'] . "_" . $hsp['weakly_non_scrambled'] . "_" .
-          $hsp['strongly_non_scrambled'];
+          $hsp['exceeded_clique_limit'] . "_" . $weakly_scrambled . "_" .
+          $strongly_scrambled;
     }
 
     $hsp_alias = implode( "_", array( "hsp", $prec_id, $hsp['prec_start'],

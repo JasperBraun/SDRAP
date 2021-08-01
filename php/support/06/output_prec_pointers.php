@@ -54,17 +54,28 @@ function output_prec_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
   fwrite( $prec_pointers_file, '#track name="prec_pointers" description="precursor pointers ' .
       'labelled ptr_[prod-id]_[prod-start]_[prod-end]_[attached-match-index]_' .
       '[other-match-index]_[other-match-ptr-prec-start]_[other-match-ptr-prec-end]_' .
-      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-non-scrambled]_' .
-      '[strongly-non-scrambled]" itemRgb-"On"' );
+      '[arrangement-coverage]_[non-gapped]_[exceeded-clique-limit]_[weakly-scrambled]_' .
+      '[strongly-scrambled]" itemRgb-"On"' );
   while ( $pointer = mysqli_fetch_assoc( $prec_pointers_table ) ) {
+
+    if ( $pointer['weakly_non_scrambled'] === 0 && $pointer['strongly_non_scrambled'] === 0 ) {
+      $strongly_scrambled = 1;
+      $weakly_scrambled = 1;
+    } else if ( $pointer['weakly_non_scrambled'] === 1 && $pointer['strongly_non_scrambled'] === 0 ) {
+      $strongly_scrambled = 0;
+      $weakly_scrambled = 1;
+    } else {
+      $strongly_scrambled = 0;
+      $weakly_scrambled = 0;
+    }
 
     $prec_id = $OUTPUT_USE_ALIAS === true ? $pointer['prec_nuc_id'] : $pointer['prec_alias'];
     if ( $pointer['non_gapped'] === NULL ) {
       $suffix = "_" . $pointer['coverage'] . "_2_2_2_2";
     } else {
       $suffix = "_" . $pointer['coverage'] . "_" . $pointer['non_gapped'] . "_" .
-          $pointer['exceeded_clique_limit'] . "_" . $pointer['weakly_non_scrambled'] . "_" .
-          $pointer['strongly_non_scrambled'];
+          $pointer['exceeded_clique_limit'] . "_" . $weakly_scrambled . "_" .
+          $strongly_scrambled;
     }
 
     $prec_pointers_row = array( $prec_id, $pointer['start'], $pointer['end'],
