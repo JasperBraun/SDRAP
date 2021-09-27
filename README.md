@@ -32,6 +32,7 @@ ciliate DNA rearrangements.
   + [Sequence Files](#sequence-files)
   + [Annotation Files](#annotation-files)
   + [Data Files](#data-files)
+* [Scrambled Nonscrambled](#scrambled-nonscrambled)
 
 ## Installation
 
@@ -441,7 +442,7 @@ for the interval to be annotated as match-complementary region.
 #### Property computation
 
 ***Note: SDRAP computes whether or not an arrangement is **non**-scrambled. See
-[#scrambled-nonscrambled](#scrambled-nonscrambled) for more details.
+[Scrambled Nonscrambled](#scrambled-nonscrambled) for more details.
 
 ![Property computation parameter input fields in the web application interface.](docs/images/input_fields_property_computation.png)
 
@@ -718,7 +719,7 @@ outputs into this subdirectory is briefly described. `<database_name>` refers to
 the name of the MySQL database (same as name of subdirectory).
 
 ***Note: SDRAP reports whether or not an arrangement is **non**-scrambled. See
-[#scrambled-nonscrambled](#scrambled-nonscrambled) for more details.
+[Scrambled Nonscrambled](#scrambled-nonscrambled) for more details.
 
 ### Sequence Files
 
@@ -831,7 +832,7 @@ A tab-delimited file with descriptions of numbers associated with the software
 
 execution in the first column and the corresponding values in the second column.
 
-##Scrambled Nonscrambled
+## Scrambled Nonscrambled
 
 weakly and strongly scrambled and non-scrambled are duals to each other. Here
 is their correspondence:
