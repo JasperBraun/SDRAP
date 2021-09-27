@@ -440,6 +440,9 @@ for the interval to be annotated as match-complementary region.
 
 #### Property computation
 
+***Note: SDRAP computes whether or not an arrangement is **non**-scrambled. See
+[#scrambled-nonscrambled](#scrambled-nonscrambled) for more details.
+
 ![Property computation parameter input fields in the web application interface.](docs/images/input_fields_property_computation.png)
 
 ##### Min coverage
@@ -714,6 +717,9 @@ the name of the MySQL database created by the procedure (see the corresponding
 outputs into this subdirectory is briefly described. `<database_name>` refers to
 the name of the MySQL database (same as name of subdirectory).
 
+***Note: SDRAP reports whether or not an arrangement is **non**-scrambled. See
+[#scrambled-nonscrambled](#scrambled-nonscrambled) for more details.
+
 ### Sequence Files
 
 #### `<database_name>_all_nucleotide.fasta`
@@ -750,6 +756,9 @@ telomeres, if any, is covered by preliminary matches by at least a certain
 amount, as specified in the input parameters (see [Optional
 parameters](#output-parameters)). All annotation files follow the BED file
 format.
+
+***Note:*** All output files which report whether or not an arrangement is scrambled,
+report **non**-scrambling. An arrangements is
 
 #### `<database_name>_prec_hsp.bed`
 
@@ -821,3 +830,14 @@ the header. (1 = true, 0 = false)
 A tab-delimited file with descriptions of numbers associated with the software
 
 execution in the first column and the corresponding values in the second column.
+
+##Scrambled Nonscrambled
+
+weakly and strongly scrambled and non-scrambled are duals to each other. Here
+is their correspondence:
+
+| scrambled                   | non-scrambled               |
+|-----------------------------|-----------------------------|
+| neither weakly nor strongly | weakly and strongly         |
+| weakly but not strongly     | weakly but not strongly     |
+| weakly and strongly         | neither weakly nor strongly |
