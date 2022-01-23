@@ -8,8 +8,8 @@ function output_prec_hsp( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERROR
   $prec_hsp_table = mysqli_query( $LINK,
       "SELECT H.`prec_nuc_id`, A_PREC.`alias` AS `prec_alias`,
           H.`prod_nuc_id`, A_PROD.`alias` AS `prod_alias`,
-          H.`prec_start`, H.`prec_end`, H.`orientation`,
-          H.`prod_start`, H.`prod_end`, H.`bitscore`, H.`pident`,
+          H.`prec_start` - 1 AS `prec_start`, H.`prec_end` - 1 AS `prec_end`, H.`orientation`,
+          H.`prod_start` - 1 AS `prod_start`, H.`prod_end` - 1 AS `prod_end`, H.`bitscore`, H.`pident`,
           C.`coverage`, P.`non_gapped`, P.`exceeded_clique_limit`,
           P.`weakly_non_scrambled`, P.`strongly_non_scrambled`
       FROM `hsp` AS H

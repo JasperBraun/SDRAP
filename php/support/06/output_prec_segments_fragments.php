@@ -8,7 +8,7 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
 
   // get precursor segments and fragments from the `match` table
   $prec_segments_table = mysqli_query( $LINK,
-      "SELECT M.`prec_nuc_id`, A.`alias` AS `prec_alias`, M.`prec_start`, M.`prec_end`, M.`index`,
+      "SELECT M.`prec_nuc_id`, A.`alias` AS `prec_alias`, M.`prec_start` - 1 AS `prec_start`, M.`prec_end` - 1 AS `prec_end`, M.`index`,
           M.`orientation`, M.`prec_segment_alias`, M.`is_preliminary`, M.`is_additional`,
           M.`is_fragment`, C.`coverage`, P.`non_gapped`, P.`exceeded_clique_limit`,
           P.`weakly_non_scrambled`, P.`strongly_non_scrambled`
