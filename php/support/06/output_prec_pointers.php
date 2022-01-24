@@ -8,7 +8,7 @@ function output_prec_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
   $prec_pointers_table = mysqli_query( $LINK,
       "SELECT * FROM (
       SELECT P.`prec_nuc_id`, A.`alias` AS `prec_alias`, P.`prec_left_alias` AS `ptr_alias`,
-          P.`left_prec_start` - 1 AS `start`, P.`left_prec_end` - 1 AS `end`,
+          P.`left_prec_start` - 1 AS `start`, P.`left_prec_end` AS `end`,
           P.`left_match_orientation` AS `orientation`,
           C.`coverage`, O.`non_gapped`, O.`exceeded_clique_limit`,
           O.`weakly_non_scrambled`, O.`strongly_non_scrambled`
@@ -25,7 +25,7 @@ function output_prec_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
       AND A.`is_primary` = 1
       UNION ALL
       SELECT P.`prec_nuc_id`, A.`alias` AS `prec_alias`, P.`prec_right_alias` AS `ptr_alias`,
-          P.`right_prec_start` - 1 AS `start`, P.`right_prec_end` - 1 AS `end`,
+          P.`right_prec_start` - 1 AS `start`, P.`right_prec_end` AS `end`,
           P.`right_match_orientation` AS `orientation`,
           C.`coverage`, O.`non_gapped`, O.`exceeded_clique_limit`,
           O.`weakly_non_scrambled`, O.`strongly_non_scrambled`

@@ -6,7 +6,7 @@ function output_gaps( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$ERRORS, $
 
   // get gaps from the `gap` table
   $gaps_table = mysqli_query( $LINK,
-      "SELECT G.`prod_nuc_id`, A.`alias` AS `prod_alias`, G.`start` - 1 AS `start`, G.`end` - 1 AS `end`, G.`index`,
+      "SELECT G.`prod_nuc_id`, A.`alias` AS `prod_alias`, G.`start` - 1 AS `start`, G.`end`, G.`index`,
           G.`gap_alias`, C.`coverage`, P.`non_gapped`, P.`exceeded_clique_limit`,
           P.`weakly_non_scrambled`, P.`strongly_non_scrambled`
       FROM `gap` AS G

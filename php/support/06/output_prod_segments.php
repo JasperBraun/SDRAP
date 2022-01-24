@@ -6,7 +6,7 @@ function output_prod_segments( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
 
   // get precursor segments and fragments from the `match` table
   $prod_segments_table = mysqli_query( $LINK,
-      "SELECT M.`prod_nuc_id`, A.`alias` AS `prod_alias`, M.`prod_start` - 1 AS `prod_start`, M.`prod_end` - 1 AS `prod_end`, M.`index`,
+      "SELECT M.`prod_nuc_id`, A.`alias` AS `prod_alias`, M.`prod_start` - 1 AS `prod_start`, M.`prod_end`, M.`index`,
           M.`orientation`, M.`prod_segment_alias`, M.`is_preliminary`, C.`coverage`, P.`non_gapped`,
           P.`exceeded_clique_limit`, P.`weakly_non_scrambled`, P.`strongly_non_scrambled`
       FROM `match` AS M

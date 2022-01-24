@@ -6,7 +6,7 @@ function output_prod_pointers( $OUTPUT_USE_ALIAS, $OUTPUT_MIN_COVERAGE, array &$
 
   // get pointers from the `pointer` table
   $prod_pointers_table = mysqli_query( $LINK,
-      "SELECT P.`prod_nuc_id`, A.`alias` AS `prod_alias`, P.`prod_start` - 1 AS `prod_start`, P.`prod_end` - 1 AS `prod_end`,
+      "SELECT P.`prod_nuc_id`, A.`alias` AS `prod_alias`, P.`prod_start` - 1 AS `prod_start`, P.`prod_end`,
           P.`prod_alias` AS `ptr_alias`, C.`coverage`, O.`non_gapped`,
           O.`exceeded_clique_limit`, O.`weakly_non_scrambled`, O.`strongly_non_scrambled`
       FROM `pointer` AS P
