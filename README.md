@@ -758,8 +758,9 @@ amount, as specified in the input parameters (see [Optional
 parameters](#output-parameters)). All annotation files follow the BED file
 format.
 
-***Note:*** All output files which report whether or not an arrangement is scrambled,
-report **non**-scrambling. An arrangements is
+***Note:*** All output files which report whether or not an arrangement is scrambled, report **non**-scrambling.
+
+***Note:*** The BED format uses **0-based start** and **1-based end** coordinates as opposed to the conventional 1-based start/end coordinates. However, 1-based start/end coordinates are still used in all segment aliases (including those in the output BED files) and all coordinates in the output SQL tables. To convert the start coordinates in the BED files to 1-based, simply add +1 to them.
 
 #### `<database_name>_prec_hsp.bed`
 

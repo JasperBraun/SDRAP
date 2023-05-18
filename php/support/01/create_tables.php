@@ -23,7 +23,7 @@ function create_parameter_table( $LINK, array &$ERRORS ) {
     `telo_max_offset`                     INT(10)         COMMENT 'maximum distance allowed between telomere and end of contig',
     `telo_min_length`                     INT(10)         COMMENT 'minimum length require_onced for telomeres',
     `hsp_min_length`                      INT(10)         COMMENT 'minimum length require_onced for HSPs',
-    `pre_match_min_bitscore`              INT(10)         COMMENT 'minimum biscore require_onced for HSPs used for preliminary arrangement',
+    `pre_match_min_bitscore`              INT(10)         COMMENT 'minimum bitscore require_onced for HSPs used for preliminary arrangement',
     `pre_match_min_pident`                DECIMAL(5,2)    COMMENT 'minimum percent identity require_onced for HSPs used for preliminary arrangement',  
     `pre_match_min_coverage_addition`     INT(10)         COMMENT 'minimum number of basepairs an HSP must cover and which are not already covered to be considered to become a preliminary match during computation of preliminary arrangement',
     `merge_tolerance`                     INT(10)         COMMENT 'maximum shift allowed between precursor segments and between product segments of two matches to still be considered for merging',

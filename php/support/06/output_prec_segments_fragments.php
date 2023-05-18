@@ -130,9 +130,9 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
 
         if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH <= intval( $length ) ) {
 
-          $prec_eliminated_sequences_row = array( $old_prec_id, $previous_segment_end + 1,
+          $prec_eliminated_sequences_row = array( $old_prec_id, $previous_segment_end,
               $length, "comp_" . $previous_segment_alias . "_none_0", "0", "+",
-              $previous_segment_end + 1, $length, "255,0,153" );
+              $previous_segment_end, $length, "255,0,153" );
 
           fwrite( $prec_eliminated_sequences_file, "\n" .
               implode( "\t", $prec_eliminated_sequences_row ) );
@@ -151,11 +151,11 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
       $next_segment_alias_split = explode( "_", $segment['prec_segment_alias'] );
       $next_segment_alias = $next_segment_alias_split[2] . "_" . $next_segment_alias_split[5];
 
-      if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH < $next_segment_start ) {
+      if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH <= $next_segment_start ) {
 
-        $prec_eliminated_sequences_row = array( $prec_id, $previous_segment_end + 1,
-            $next_segment_start - 1, "comp_" . $previous_segment_alias . "_" . $next_segment_alias, "0", "+",
-            $previous_segment_end + 1, $next_segment_start - 1, "255,0,153" );
+        $prec_eliminated_sequences_row = array( $prec_id, $previous_segment_end,
+            $next_segment_start, "comp_" . $previous_segment_alias . "_" . $next_segment_alias, "0", "+",
+            $previous_segment_end, $next_segment_start, "255,0,153" );
 
         fwrite( $prec_eliminated_sequences_file, "\n" .
             implode( "\t", $prec_eliminated_sequences_row ) );
@@ -180,9 +180,9 @@ function output_prec_segments_fragments( $OUTPUT_USE_ALIAS, $OUTPUT_FRAGMENTS,
     // process last precursor sequence
     if ( $previous_segment_end + $OUTPUT_MIN_COMPLEMENT_LENGTH <= intval( $length ) ) {
 
-      $prec_eliminated_sequences_row = array( $prec_id, $previous_segment_end + 1,
+      $prec_eliminated_sequences_row = array( $prec_id, $previous_segment_end,
           $length, "comp_" . $previous_segment_alias . "_none_0", "0", "+",
-          $previous_segment_end + 1, $length, "255,0,153" );
+          $previous_segment_end, $length, "255,0,153" );
 
       fwrite( $prec_eliminated_sequences_file, "\n" .
           implode( "\t", $prec_eliminated_sequences_row ) );
