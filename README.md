@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/207176784.svg)](https://zenodo.org/badge/latestdoi/207176784)
+
 # SDRAP - Scrambled DNA Rearrangement Annotation Protocol
 
 SDRAP is a web application which annotates DNA segments in DNA rearrangement
